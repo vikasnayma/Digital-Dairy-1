@@ -22,20 +22,20 @@ public class MilkCollectionService {
     private final UserRepo userRepository;
     private final DairyRepository dairyRepository;
 
-    public MilkCollectionDTO addMilkCollection(MilkCollectionDTO dto) throws Throwable {
-        User farmerId = userRepository.findById(dto.getFarmerId())
-                .orElseThrow(() -> new RuntimeException("farmer not found with ID:" + dto.getFarmerId()));
+    public MilkCollectionDTO addMilkCollection(MilkCollectionDTO dto) {
+        User farmer = userRepository.findById(dto.getFarmerId())
+                .orElseThrow(() -> new RuntimeException("Farmer not found with ID: " + dto.getFarmerId()));
 
         Dairy dairy = dairyRepository.findById(dto.getDairyId())
-                .orElseThrow(() -> new RuntimeException("farmer not found with ID:" + dto.getFarmerId()));
+                .orElseThrow(() -> new RuntimeException("Dairy not found with ID: " + dto.getDairyId()));
 
         BigDecimal totalAmount = dto.getQuantityLitres().multiply(dto.getRateApplied());
 
         MilkCollection milkCollection = MilkCollection.builder()
-                .farmer(farmerId)
+                .farmer(farmer)
                 .dairy(dairy)
                 .date(dto.getDate())
-                .shift(MilkCollection.Shift.valueOf(dto.getShift().toUpperCase()))
+                .shift(MilkCollection.Shift.valueOf(dto.getShift().toString()))
                 .quantityLitres(dto.getQuantityLitres())
                 .fatContent(dto.getFatContent())
                 .qualityGrade(dto.getQualityGrade())
@@ -43,36 +43,31 @@ public class MilkCollectionService {
                 .totalAmount(totalAmount)
                 .build();
 
-        MilkCollection collection = milkCollectionRepository.save(milkCollection);
-        return toDTO(collection);
+        MilkCollection savedCollection = milkCollectionRepository.save(milkCollection);
+        return toDTO(savedCollection);
     }
 
-    //Get all milkCollection
-    public List<MilkCollectionDTO> getAllMilkCollection(){
+    public List<MilkCollectionDTO> getAllMilkCollection() {
         return milkCollectionRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    //get milkcollection by farmer id
     public List<MilkCollectionDTO> getCollectionsByFarmer(Long farmerId) {
-        return milkCollectionRepository.findByFarmer_userId(farmerId)
+        return milkCollectionRepository.findByFarmer_UserId(farmerId)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    // Convert Entity ➝ DTO
     private MilkCollectionDTO toDTO(MilkCollection m) {
         return MilkCollectionDTO.builder()
                 .collectionId(m.getCollectionId())
                 .farmerId(m.getFarmer().getUser_id())
-                .farmerName(m.getFarmer().getName())
                 .dairyId(m.getDairy().getDairyId())
-                .dairyName(m.getDairy().getName())
                 .date(m.getDate())
-                .shift(m.getShift().name())
+                .shift(m.getShift())
                 .quantityLitres(m.getQuantityLitres())
                 .fatContent(m.getFatContent())
                 .qualityGrade(m.getQualityGrade())

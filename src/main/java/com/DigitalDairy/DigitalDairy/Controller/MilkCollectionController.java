@@ -1,6 +1,5 @@
 package com.DigitalDairy.DigitalDairy.Controller;
 
-
 import com.DigitalDairy.DigitalDairy.DTOs.MilkCollectionDTO;
 import com.DigitalDairy.DigitalDairy.Services.MilkCollectionService;
 import lombok.RequiredArgsConstructor;
@@ -16,29 +15,37 @@ public class MilkCollectionController {
 
     private final MilkCollectionService milkCollectionService;
 
-    // Add new milk collection
+    /**
+     * Add a new milk collection record
+     * POST /api/milk-collections
+     */
     @PostMapping
     public ResponseEntity<MilkCollectionDTO> addMilkCollection(@RequestBody MilkCollectionDTO dto) {
         try {
             MilkCollectionDTO saved = milkCollectionService.addMilkCollection(dto);
             return ResponseEntity.ok(saved);
-        } catch (Throwable e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
-    // Get all milk collections
+    /**
+     * Get all milk collection records
+     * GET /api/milk-collections
+     */
     @GetMapping
     public ResponseEntity<List<MilkCollectionDTO>> getAllMilkCollections() {
         List<MilkCollectionDTO> collections = milkCollectionService.getAllMilkCollection();
         return ResponseEntity.ok(collections);
     }
 
-    // Get milk collections by farmer ID
+    /**
+     * Get milk collection records by farmer ID
+     * GET /api/milk-collections/farmer/{id}
+     */
     @GetMapping("/farmer/{farmerId}")
-    public ResponseEntity<List<MilkCollectionDTO>> getCollectionsByFarmer(@PathVariable Long farmerId) {
+    public ResponseEntity<List<MilkCollectionDTO>> getCollectionsByFarmer(@PathVariable("farmerId") Long farmerId) {
         List<MilkCollectionDTO> collections = milkCollectionService.getCollectionsByFarmer(farmerId);
         return ResponseEntity.ok(collections);
     }
 }
-

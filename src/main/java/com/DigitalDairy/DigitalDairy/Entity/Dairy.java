@@ -21,5 +21,5 @@ public class Dairy {
 
     @ManyToOne
     @JoinColumn(name = "operator_id")
-    private User operator_id;
+    private User operator;
 }

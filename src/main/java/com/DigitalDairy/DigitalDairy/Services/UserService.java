@@ -59,7 +59,7 @@ public class UserService {
                 String token = jwtService.generateToken(user.getEmail());
 
                 UserDTO dto = new UserDTO();
-                dto.setUser_id(user.getUser_id());
+                dto.setUserId(user.getUser_id());
                 dto.setName(user.getName());
                 dto.setEmail(user.getEmail());
                 dto.setPhone(user.getPhone());
