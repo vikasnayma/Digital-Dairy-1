@@ -10,6 +10,6 @@ public class DairyDTO {
     private Long dairyId;
     private String name;
     private String location;
-    private UserDTO operator;  // Embed operator info using UserDTO
+    private Long operatorId;
 }
 

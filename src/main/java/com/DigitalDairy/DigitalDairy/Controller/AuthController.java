@@ -16,7 +16,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody User user) {
+    public Map<String, Object> register(@RequestBody User user) {
         return userService.registerUser(user);
     }
 

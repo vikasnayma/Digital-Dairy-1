@@ -25,8 +25,8 @@ public class UserService {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public Map<String, String> registerUser(User user) {
-        Map<String, String> response = new HashMap<>();
+    public Map<String, Object> registerUser(User user) {
+        Map<String, Object> response = new HashMap<>();
 
         if (user.getEmail() == null || !user.getEmail().contains("@")) {
             response.put("status", "error");
@@ -40,11 +40,25 @@ public class UserService {
             return response;
         }
 
+        // Save new user
         user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        response.put("status", "success");
-        response.put("message", "User registered successfully");
+        // Generate token
+        String token = jwtService.generateToken(savedUser.getEmail());
+
+        // Build DTO
+        UserDTO dto = UserDTO.builder()
+                .userId(savedUser.getUser_id())
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
+                .phone(savedUser.getPhone())
+                .role(savedUser.getRole())
+                .build();
+
+        // Build success response
+        response.put("token", token);
+        response.put("user", dto);
         return response;
     }
 

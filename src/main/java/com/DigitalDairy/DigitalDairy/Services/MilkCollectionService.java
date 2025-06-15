@@ -61,6 +61,13 @@ public class MilkCollectionService {
                 .collect(Collectors.toList());
     }
 
+    public List<MilkCollectionDTO> getCollectionByDairy(Long dairyID){
+        return milkCollectionRepository.findByDairy_DairyId(dairyID)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     private MilkCollectionDTO toDTO(MilkCollection m) {
         return MilkCollectionDTO.builder()
                 .collectionId(m.getCollectionId())
