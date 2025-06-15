@@ -39,7 +39,10 @@ export const AuthProvider = ({ children }) => {
   const signup = async(formData) => {
     try {
       const response = await axios.post("http://localhost:8080/api/auth/register", formData);
-      console.log(response);
+      console.log(response.data.user);
+      setUser(response.data.user);
+      localStorage.setItem("authUser", JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
     } catch (error) {
       console.log("Signup Error" , error);
     }

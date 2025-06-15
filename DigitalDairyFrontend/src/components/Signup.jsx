@@ -19,8 +19,13 @@ export default function SignupForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup(formData); 
+    signup(formData);
+    if(formData.role == 'operator'){
+      navigate('/dairy-create');
+    }
+    else{
     navigate('/dashboard'); 
+    }
   };
 
   return (

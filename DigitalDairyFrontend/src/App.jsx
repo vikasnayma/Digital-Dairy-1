@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import DairyForm from "./components/DairyForm";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import Layout from "./components/Layout";
@@ -20,6 +21,7 @@ import ProfileFarmer from "./farmer/pages//ProfileFarmer";
 import BookingsOperator from "./operator/pages/BookingsOperator";
 import ProfileOperator from "./operator/pages/ProfileOperator";
 import HomeOperator from "./operator/pages/HomeOperator";
+import MilkCollectionOperator from "./operator/pages/MilkCollectionOperator";
 
 import OperatorAdmin from "./admin/pages/OperatorAdmin";
 import FarmerAdmin from "./admin/pages/FarmerAdmin";
@@ -76,6 +78,10 @@ const App = () => {
               path="/login"
               element={<PublicRoute element={<Login />} />}
             />
+            <Route
+              path="/dairy-create"
+              element={<PublicRoute element={<DairyForm />} />}
+            />
 
             {/* Farmer Routes */}
             <Route
@@ -92,9 +98,10 @@ const App = () => {
               path="/dashboard"
               element={<ProtectedRoute element={<Layout />} />}
             >
-               <Route path="home-operator" element={<HomeOperator/>}></Route>
+              <Route path="home-operator" element={<HomeOperator/>}></Route>
               <Route path="bookings-operator" element={<BookingsOperator/>}></Route>
               <Route path="profile-operator" element={<ProfileOperator/>}></Route>
+              <Route path="milk-collection-operator" element={<MilkCollectionOperator/>}></Route>
             </Route>
 
             {/* Admin Routes */}
