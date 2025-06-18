@@ -6,6 +6,7 @@ import {
   setMilkCollection,
   setPreMilkBookings,
   setMilkExportation,
+  setAllFarmers,
 } from "./dairySlice";
 import axios from "axios";
 
@@ -271,6 +272,25 @@ export const fetchMilkExportationsByClient = () => async (dispatch) => {
       }
     );
     dispatch(setMilkExportation(res.data));
+    dispatch(setError(null));
+  } catch (err) {
+    dispatch(
+      setError(err.response?.data?.error || "Failed to fetch milk collections")
+    );
+  }
+  dispatch(setLoading(false));
+};
+
+
+export const fetchAllFarmersByDairy = (dairyId) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/auth/farmers/${dairyId}`
+    );
+    dispatch(setAllFarmers(res.data));
+    // console.log(res.data);
+    
     dispatch(setError(null));
   } catch (err) {
     dispatch(

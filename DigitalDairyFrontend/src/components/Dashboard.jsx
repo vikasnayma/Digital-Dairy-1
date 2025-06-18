@@ -48,9 +48,10 @@ const Dashboard = () => {
     operator: [
       { name: "Home", path: "/dashboard/home-operator", icon: <FaHome /> },
       { name: "Bookings", path: "/dashboard/bookings-operator", icon: <FaClipboardList /> },
-      { name: "Profile", path: "/dashboard/profile-operator", icon: <FaUser /> },
+      { name: "Farmers", path: "/dashboard/farmers-operator", icon: <FaUser /> },
       { name: "Milk Collection", path: "/dashboard/milk-collection-operator", icon: <FaClipboardList /> },
       { name: "Milk Exportation", path: "/dashboard/exportation-operator", icon: <FaClipboardList /> },
+      { name: "Profile", path: "/dashboard/profile-operator", icon: <FaUser /> },
     ],
     admin: [
       { name: "Home", path: "/dashboard/home-admin", icon: <FaHome /> },

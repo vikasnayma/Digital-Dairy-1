@@ -9,6 +9,7 @@ import {
 const PreBookingFarmer = () => {
   const user = JSON.parse(localStorage.getItem("authUser"));
   const farmerId = user.userId;
+  const dairyId = user.dairyId;
   const dispatch = useDispatch();
   const { loading, error, success, preMilkBookings } = useSelector(
     (state) => state.preMilkBookings
@@ -16,7 +17,7 @@ const PreBookingFarmer = () => {
 
   const [formData, setFormData] = useState({
     farmerId,
-    dairyId: "",
+    dairyId,
     bookingDate: "",
     shift: "morning",
     quantityLitres: "",
@@ -66,19 +67,6 @@ const PreBookingFarmer = () => {
   
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Dairy ID
-            </label>
-            <input
-              type="number"
-              name="dairyId"
-              value={formData.dairyId}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-              required
-            />
-          </div>
   
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">

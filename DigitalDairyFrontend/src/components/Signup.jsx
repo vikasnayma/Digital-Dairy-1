@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import { useNavigate , Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext/AuthContext';
 
 export default function SignupForm() {
   const navigate = useNavigate();
   const { signup } = useAuth();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     phone: '',
     role: 'farmer',
+    dairyId: '' // newly added
   });
 
   const handleChange = (e) => {
@@ -19,12 +21,19 @@ export default function SignupForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup(formData);
-    if(formData.role == 'operator'){
-      navigate('/dairy-create');
+
+    // Remove dairy_id if not farmer/client
+    const submitData = { ...formData };
+    if (submitData.role !== 'farmer' && submitData.role !== 'client') {
+      delete submitData.dairyId;
     }
-    else{
-    navigate('/dashboard'); 
+
+    signup(submitData);
+
+    if (formData.role === 'operator') {
+      navigate('/dairy-create');
+    } else {
+      navigate('/dashboard');
     }
   };
 
@@ -83,9 +92,21 @@ export default function SignupForm() {
         >
           <option value="farmer">Farmer</option>
           <option value="operator">Operator</option>
-          <option value="admin">Admin</option>
           <option value="client">Client</option>
         </select>
+
+        {/* Show dairy_id input only for farmer or client */}
+        {(formData.role === 'farmer' || formData.role === 'client') && (
+          <input
+            type="number"
+            name="dairyId"
+            placeholder="Enter Dairy ID"
+            className="w-full px-4 py-2 mb-6 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+            value={formData.dairyId}
+            onChange={handleChange}
+            required
+          />
+        )}
 
         <button
           type="submit"
@@ -93,6 +114,7 @@ export default function SignupForm() {
         >
           Register
         </button>
+
         <p className="mt-4 text-sm text-center text-gray-600">
           Already have an account?{' '}
           <Link to="/login" className="text-green-600 font-semibold hover:underline">

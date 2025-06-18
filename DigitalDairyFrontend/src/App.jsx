@@ -25,6 +25,12 @@ import ProfileOperator from "./operator/pages/ProfileOperator";
 import HomeOperator from "./operator/pages/HomeOperator";
 import MilkCollectionOperator from "./operator/pages/MilkCollectionOperator";
 import MilkExportationOperator from "./operator/pages/MilkExportationOperator";
+import PaymentMilkCollection from './operator/pages/PaymentMilkCollection';
+import PaymentSuccessOperator from "./operator/pages/PaymentSuccessOperator";
+import AllFarmers from "./operator/pages/AllFarmers";
+import FarmerDetail from "./operator/pages/FarmerDetail";
+
+
 
 import OperatorAdmin from "./admin/pages/OperatorAdmin";
 import FarmerAdmin from "./admin/pages/FarmerAdmin";
@@ -114,8 +120,12 @@ const App = () => {
               <Route path="home-operator" element={<HomeOperator/>}></Route>
               <Route path="bookings-operator" element={<BookingsOperator/>}></Route>
               <Route path="profile-operator" element={<ProfileOperator/>}></Route>
+              <Route path="farmers-operator" element={<AllFarmers/>}></Route>
+              <Route path="farmer-details/:dairyId/:farmerId" element={<FarmerDetail/>}></Route>
               <Route path="milk-collection-operator" element={<MilkCollectionOperator/>}></Route>
               <Route path="exportation-operator" element={<MilkExportationOperator/>}></Route>
+              <Route path="milk-collection-operator/payment/:farmerId/:collectionId" element={<PaymentMilkCollection/>}></Route>
+              <Route path="payment-success-operator" element={<PaymentSuccessOperator/>}></Route>
             </Route>
 
             {/* Admin Routes */}

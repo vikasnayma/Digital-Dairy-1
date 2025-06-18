@@ -6,6 +6,7 @@ const initialState = {
   milkCollection: [],
   milkExportation:[],
   preMilkBookings : [],
+  allFarmers : [],
   loading: false,
   error: null,
   success: false,
@@ -17,6 +18,9 @@ export const dairySlice = createSlice({
     reducers: {
       setDairy: (state , action) => {
         state.dairy = action.payload;
+      },
+      setAllFarmers :(state , action) => {
+        state.allFarmers = action.payload;
       },
       setMilkCollection: (state,action) => {
         state.milkCollection = action.payload;
@@ -40,6 +44,6 @@ export const dairySlice = createSlice({
   });
 
 
-export const {  setLoading, setError , setSuccess , setDairy , setMilkCollection , setPreMilkBookings ,setMilkExportation } = dairySlice.actions;
+export const {  setLoading, setError , setSuccess , setDairy , setMilkCollection , setPreMilkBookings ,setMilkExportation , setAllFarmers} = dairySlice.actions;
 
 export default dairySlice.reducer;
