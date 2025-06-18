@@ -40,6 +40,8 @@ const Dashboard = () => {
   const menuMap = {
     farmer: [
       { name: "Home", path: "/dashboard/home-farmer", icon: <FaHome /> },
+      { name: "Milk Collection History", path: "/dashboard/milk-collection-history-farmer", icon: <FaClipboardList /> },
+      { name: "Pre Milk Bookings", path: "/dashboard/pre-booking-farmer", icon: <FaClipboardList /> },
       { name: "Revenue", path: "/dashboard/revenue-farmer", icon: <FaMoneyBill /> },
       { name: "Profile", path: "/dashboard/profile-farmer", icon: <FaUser /> },
     ],
@@ -47,7 +49,8 @@ const Dashboard = () => {
       { name: "Home", path: "/dashboard/home-operator", icon: <FaHome /> },
       { name: "Bookings", path: "/dashboard/bookings-operator", icon: <FaClipboardList /> },
       { name: "Profile", path: "/dashboard/profile-operator", icon: <FaUser /> },
-      { name: "Milk Collection Entry", path: "/dashboard/milk-collection-operator", icon: <FaClipboardList /> },
+      { name: "Milk Collection", path: "/dashboard/milk-collection-operator", icon: <FaClipboardList /> },
+      { name: "Milk Exportation", path: "/dashboard/exportation-operator", icon: <FaClipboardList /> },
     ],
     admin: [
       { name: "Home", path: "/dashboard/home-admin", icon: <FaHome /> },
@@ -57,7 +60,9 @@ const Dashboard = () => {
     ],
     client: [
       { name: "Home", path: "/dashboard/home-client", icon: <FaHome /> },
+      { name: "Collection History", path: "/dashboard/exportation-client", icon: <FaClipboardList /> },
       { name: "Profile", path: "/dashboard/profile-client", icon: <FaUser /> },
+      
     ],
   };
 

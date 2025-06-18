@@ -4,6 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   dairy: [],
   milkCollection: [],
+  milkExportation:[],
+  preMilkBookings : [],
   loading: false,
   error: null,
   success: false,
@@ -19,6 +21,12 @@ export const dairySlice = createSlice({
       setMilkCollection: (state,action) => {
         state.milkCollection = action.payload;
       },
+      setMilkExportation: (state,action) => {
+        state.milkExportation = action.payload;
+      },
+      setPreMilkBookings: (state,action) => {
+        state.preMilkBookings = action.payload;
+      },
       setLoading: (state, action) => {
         state.loading = action.payload;
       },
@@ -32,6 +40,6 @@ export const dairySlice = createSlice({
   });
 
 
-export const {  setLoading, setError , setSuccess , setDairy , setMilkCollection  } = dairySlice.actions;
+export const {  setLoading, setError , setSuccess , setDairy , setMilkCollection , setPreMilkBookings ,setMilkExportation } = dairySlice.actions;
 
 export default dairySlice.reducer;

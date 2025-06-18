@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addMilkCollection,
-  fetchMilkCollectionsByDairy,
+  addMilkExportation,
+  fetchMilkExportationsByDairy,
   getDairyDetails
 } from '../../Redux/Slices/dairyActions';
-// import { setMilkCollection } from '../../Redux/Slices/dairySlice';
 
 
-const MilkCollectionOperator = () => {
+
+const MilkExportationOperator = () => {
   const dispatch = useDispatch();
-  const { loading, error, success, milkCollection } = useSelector((state) => state.milkCollection);
+  const { loading, error, success, milkExportation } = useSelector((state) => state.milkExportation);
   const { dairy } = useSelector((state) => state.dairy);
 
   const [formData, setFormData] = useState({
-    farmerId: '',
+    clientId: '',
     dairyId: '',
     date: '',
     shift: 'morning',
@@ -54,9 +54,9 @@ const MilkCollectionOperator = () => {
       rateApplied: parseFloat(formData.rateApplied)
     };
 
-    dispatch(addMilkCollection(payload));
+    dispatch(addMilkExportation(payload));
     setFormData({
-      farmerId: '',
+      clientId: '',
       dairyId: '',
       date: '',
       shift: 'morning',
@@ -79,22 +79,22 @@ const MilkCollectionOperator = () => {
   useEffect(() => {
     if (dairy?.dairyId) {
       setFormData(prev => ({ ...prev, dairyId: dairy.dairyId }));
-      dispatch(fetchMilkCollectionsByDairy(dairy.dairyId));
+      dispatch(fetchMilkExportationsByDairy(dairy.dairyId));
     }
   }, [dairy, dispatch]);
 
-  const filteredCollections = milkCollection?.filter(entry =>
+  const filteredCollections = milkExportation?.filter(entry =>
     (!filter.date || entry.date === filter.date) &&
     (!filter.shift || entry.shift.toLowerCase() === filter.shift.toLowerCase())
   );
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 space-y-10">
-      {/* === Add Milk Collection Form === */}
+      {/* === Add Milk Exportation Form === */}
       <div className="bg-white p-6 shadow rounded">
-        <h2 className="text-2xl font-bold text-blue-800 mb-4">Add Milk Collection</h2>
+        <h2 className="text-2xl font-bold text-blue-800 mb-4">Add Milk Exportation</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="text" name="farmerId" value={formData.farmerId} onChange={handleChange} required className="border p-2 rounded" placeholder="Farmer ID" />
+          <input type="text" name="clientId" value={formData.clientId} onChange={handleChange} required className="border p-2 rounded" placeholder="Client ID" />
           <input type="text" name="dairyId" value={formData.dairyId} onChange={handleChange} required className="border p-2 rounded" placeholder="Dairy ID" />
           <input type="date" name="date" value={formData.date} onChange={handleChange} required className="border p-2 rounded" />
           <select name="shift" value={formData.shift} onChange={handleChange} className="border p-2 rounded">
@@ -111,12 +111,12 @@ const MilkCollectionOperator = () => {
           </button>
         </form>
         {error && <p className="text-red-500 mt-2">{error}</p>}
-        {success && <p className="text-green-600 mt-2">Milk collection added successfully!</p>}
+        {success && <p className="text-green-600 mt-2">Milk Exportation added successfully!</p>}
       </div>
 
-      {/* === Filter Milk Collections === */}
+      {/* === Filter Milk Exportation === */}
       <div className="bg-white p-6 shadow rounded">
-        <h2 className="text-xl font-bold text-blue-700 mb-4">Filter Milk Collections</h2>
+        <h2 className="text-xl font-bold text-blue-700 mb-4">Filter Milk Exportations</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <input
             type="date"
@@ -146,8 +146,8 @@ const MilkCollectionOperator = () => {
             {filteredCollections.length > 0 ? (
               <ul className="space-y-2 max-h-64 overflow-y-auto">
                 {filteredCollections.map(entry => (
-                  <li key={entry.collectionId} className="p-3 border rounded bg-gray-50 shadow-sm">
-                    <strong>Farmer ID:</strong> {entry.farmerId} | <strong>Qty:</strong> {entry.quantityLitres}L | <strong>Fat:</strong> {entry.fatContent}% | <strong>Rate:</strong> ₹{entry.rateApplied} | <strong>Total:</strong> ₹{entry.totalAmount}
+                  <li key={entry.exportId} className="p-3 border rounded bg-gray-50 shadow-sm">
+                    <strong>Client ID:</strong> {entry.clientId} | <strong>Qty:</strong> {entry.quantityLitres}L | <strong>Fat:</strong> {entry.fatContent}% | <strong>Rate:</strong> ₹{entry.rateApplied} | <strong>Total:</strong> ₹{entry.totalAmount}
                   </li>
                 ))}
               </ul>
@@ -161,4 +161,4 @@ const MilkCollectionOperator = () => {
   );
 };
 
-export default MilkCollectionOperator;
+export default MilkExportationOperator;

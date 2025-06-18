@@ -16,17 +16,26 @@ import { useAuth } from "./AuthContext/AuthContext";
 
 import HomeFarmer from "./farmer/pages/HomeFarmer";
 import RevenueFarmer from "./farmer/pages/RevenueFarmer";
-import ProfileFarmer from "./farmer/pages//ProfileFarmer";
+import ProfileFarmer from "./farmer/pages/ProfileFarmer";
+import CollectionHistoryFarmer from './farmer/pages/CollectionHistoryFarmer'
+import PreBookingFarmer from './farmer/pages/PreBookingFarmer'
 
 import BookingsOperator from "./operator/pages/BookingsOperator";
 import ProfileOperator from "./operator/pages/ProfileOperator";
 import HomeOperator from "./operator/pages/HomeOperator";
 import MilkCollectionOperator from "./operator/pages/MilkCollectionOperator";
+import MilkExportationOperator from "./operator/pages/MilkExportationOperator";
 
 import OperatorAdmin from "./admin/pages/OperatorAdmin";
 import FarmerAdmin from "./admin/pages/FarmerAdmin";
 import ProfileAdmin from "./admin/pages/ProfileAdmin";
 import HomeAdmin from "./admin/pages/HomeAdmin";
+
+
+import HomeClient from './clientdairy/pages/HomeClient'
+import ProfileClient from './clientdairy/pages/ProfileClient'
+import MilkExportationClient from './clientdairy/pages/MilkExportationClient'
+
 
 //Block login/signup if already logged in
 const PublicRoute = ({ element }) => {
@@ -47,6 +56,8 @@ const AutoRedirect = () => {
       return <Navigate to="/dashboard/home-farmer" replace />;
     case "operator":
       return <Navigate to="/dashboard/home-operator" replace />;
+      case "client":
+        return <Navigate to="/dashboard/home-client" replace />;
     case "admin":
       return <Navigate to="/dashboard/home-admin" replace />;
     // case "client":
@@ -91,6 +102,8 @@ const App = () => {
               <Route path="home-farmer" element={<HomeFarmer/>}></Route>
               <Route path="revenue-farmer" element={<RevenueFarmer/>}></Route>
               <Route path="profile-farmer" element={<ProfileFarmer/>}></Route>
+              <Route path="milk-collection-history-farmer" element={<CollectionHistoryFarmer />}></Route>
+              <Route path="pre-booking-farmer" element={<PreBookingFarmer />}></Route>
             </Route>
 
             {/* Operator Routes */}
@@ -102,6 +115,7 @@ const App = () => {
               <Route path="bookings-operator" element={<BookingsOperator/>}></Route>
               <Route path="profile-operator" element={<ProfileOperator/>}></Route>
               <Route path="milk-collection-operator" element={<MilkCollectionOperator/>}></Route>
+              <Route path="exportation-operator" element={<MilkExportationOperator/>}></Route>
             </Route>
 
             {/* Admin Routes */}
@@ -113,6 +127,16 @@ const App = () => {
               <Route path="operators-admin" element={<OperatorAdmin/>}></Route>
               <Route path="farmers-admin" element={<FarmerAdmin/>}></Route>
               <Route path="profile-admin" element={<ProfileAdmin/>}></Route>
+            </Route>
+
+            {/* Client Routes */}
+            <Route
+              path="/dashboard"
+              element={<ProtectedRoute element={<Layout />} />}
+            >
+              <Route path="home-client" element={<HomeClient/>}></Route>
+              <Route path="exportation-client" element={<MilkExportationClient/>}></Route>
+              <Route path="profile-client" element={<ProfileClient/>}></Route>
             </Route>
           </Routes>
         </div>
