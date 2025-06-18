@@ -20,18 +20,23 @@ public class PreMilkBookingController {
         return preMilkBookingService.createPreBooking(dto);
     }
 
-    @GetMapping
-    public List<PreMilkBookingDTO> getAllBookings(){
-        return preMilkBookingService.getAllPreBookings();
+    @GetMapping("/{dairyId}")
+    public List<PreMilkBookingDTO> getAllBookings(@PathVariable Long dairyId){
+        return preMilkBookingService.getAllPreBookings(dairyId);
+    }
+
+    @GetMapping("/farmer/{farmerId}")
+    public List<PreMilkBookingDTO> getAllBookingsByFarmer(@PathVariable Long farmerId){
+        return preMilkBookingService.getAllPreBookingsByFarmer(farmerId);
     }
 
     @PutMapping("/{id}/status")
-    public PreMilkBookingDTO updateStatus(@PathVariable Long id , @RequestParam PreMilkBooking.Status status){
+    public PreMilkBookingDTO updateStatus(@PathVariable Long id , @RequestParam("status") PreMilkBooking.Status status){
         return preMilkBookingService.updateStatus(id , status);
     }
 
     @PutMapping("/{id}/payment-status")
-    public PreMilkBookingDTO updatePaymentStatus(@PathVariable Long id , @RequestParam PreMilkBooking.PaymentStatus paymentStatus){
+    public PreMilkBookingDTO updatePaymentStatus(@PathVariable Long id , @RequestParam("paymentStatus") PreMilkBooking.PaymentStatus paymentStatus){
         return preMilkBookingService.updatePaymentStatus(id , paymentStatus);
     }
 }

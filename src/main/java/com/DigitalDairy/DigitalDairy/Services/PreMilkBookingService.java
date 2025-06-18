@@ -39,8 +39,14 @@ public class PreMilkBookingService {
         return toDTO(savedBooking);
     }
 
-    public List<PreMilkBookingDTO> getAllPreBookings() {
-        return preMilkBookingRepository.findAll()
+    public List<PreMilkBookingDTO> getAllPreBookings(Long dairyId) {
+        return preMilkBookingRepository.findByDairy_DairyId(dairyId)
+                .stream().map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<PreMilkBookingDTO> getAllPreBookingsByFarmer(Long farmerId) {
+        return preMilkBookingRepository.findByFarmer_UserId(farmerId)
                 .stream().map(this::toDTO)
                 .collect(Collectors.toList());
     }

@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/milk-rates/**").permitAll()
                         .requestMatchers("/api/pre-bookings/**").permitAll()
                         .requestMatchers("/api/dairy-details/**").permitAll()
+                        .requestMatchers("/api/milk-exportation/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
