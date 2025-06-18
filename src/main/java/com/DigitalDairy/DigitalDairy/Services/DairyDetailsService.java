@@ -1,12 +1,15 @@
 package com.DigitalDairy.DigitalDairy.Services;
 
 import com.DigitalDairy.DigitalDairy.DTOs.DairyDTO;
+import com.DigitalDairy.DigitalDairy.DTOs.UserDTO;
 import com.DigitalDairy.DigitalDairy.Entity.Dairy;
 import com.DigitalDairy.DigitalDairy.Entity.User;
 import com.DigitalDairy.DigitalDairy.Repo.DairyRepository;
 import com.DigitalDairy.DigitalDairy.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,8 @@ public class DairyDetailsService {
 
         return convertToDTO(dairy);
     }
+
+
 
     public DairyDTO updateDairyDetails(DairyDTO dto , Long operatorId){
         Dairy currentDairy = dairyRepository.findByOperator_UserId(operatorId).orElseThrow(() -> new RuntimeException("Dairy not found"));

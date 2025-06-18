@@ -17,6 +17,8 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    private Long dairyId;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -25,6 +27,14 @@ public class User {
     private String phone;
 
     private LocalDateTime created_at;
+
+    public Long getDairyId() {
+        return dairyId;
+    }
+
+    public void setDairyId(Long dairyId) {
+        this.dairyId = dairyId;
+    }
 
     @PrePersist
     public void onCreate() {

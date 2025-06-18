@@ -5,6 +5,7 @@ import com.DigitalDairy.DigitalDairy.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin
@@ -23,5 +24,10 @@ public class AuthController {
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody User user) {
         return userService.authenticateUser(user);
+    }
+
+    @GetMapping("/farmers/{dairyId}")
+    public List<User> getFarmersByDairy(@PathVariable Long dairyId) {
+        return userService.getFarmersByDairyId(dairyId);
     }
 }

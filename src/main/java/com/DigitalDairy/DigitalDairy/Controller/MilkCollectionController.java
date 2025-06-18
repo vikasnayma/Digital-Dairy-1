@@ -39,6 +39,11 @@ public class MilkCollectionController {
         return ResponseEntity.ok(collections);
     }
 
+    @GetMapping("/collection/{collectionId}")
+    public MilkCollectionDTO getMilkCollectionByID(@PathVariable Long collectionId){
+        return milkCollectionService.getMilkCollectionByID(collectionId);
+    }
+
     @GetMapping("/dairy/{dairyId}")
     public ResponseEntity<List<MilkCollectionDTO>> getCollectionByDairy(@PathVariable Long dairyId){
         List<MilkCollectionDTO> collection = milkCollectionService.getCollectionByDairy(dairyId);

@@ -7,6 +7,7 @@ import com.DigitalDairy.DigitalDairy.Entity.User;
 import com.DigitalDairy.DigitalDairy.Repo.DairyRepository;
 import com.DigitalDairy.DigitalDairy.Repo.MilkCollectionRepository;
 import com.DigitalDairy.DigitalDairy.Repo.UserRepo;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,12 @@ public class MilkCollectionService {
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public MilkCollectionDTO getMilkCollectionByID(Long collectionId){
+        return milkCollectionRepository.findById(collectionId)
+                .map(this::toDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Milk collection not found with ID: " + collectionId));
     }
 
     public List<MilkCollectionDTO> getCollectionsByFarmer(Long farmerId) {

@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class UserDTO {
     private Long userId;
+    private Long dairyId;
     private String name;
     private String email;
     private String phone;

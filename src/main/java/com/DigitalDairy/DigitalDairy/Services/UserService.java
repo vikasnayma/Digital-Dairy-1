@@ -2,6 +2,7 @@ package com.DigitalDairy.DigitalDairy.Services;
 
 import com.DigitalDairy.DigitalDairy.DTOs.UserDTO;
 import com.DigitalDairy.DigitalDairy.Entity.User;
+import com.DigitalDairy.DigitalDairy.Enum.Role;
 import com.DigitalDairy.DigitalDairy.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
@@ -22,6 +23,7 @@ public class UserService {
 
     @Autowired
     private UserRepo userRepository;
+
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -54,6 +56,7 @@ public class UserService {
                 .email(savedUser.getEmail())
                 .phone(savedUser.getPhone())
                 .role(savedUser.getRole())
+                .dairyId(savedUser.getDairyId())
                 .build();
 
         // Build success response
@@ -78,6 +81,7 @@ public class UserService {
                 dto.setEmail(user.getEmail());
                 dto.setPhone(user.getPhone());
                 dto.setRole(user.getRole());
+                dto.setDairyId(user.getDairyId());
 
                 Map<String, Object> result = new HashMap<>();
                 result.put("token", token);
@@ -91,4 +95,9 @@ public class UserService {
 
         return Map.of("status", "error", "message", "Authentication failed");
     }
+
+    public List<User> getFarmersByDairyId(Long dairyId) {
+        return userRepository.findByDairyIdAndRole(dairyId , Role.farmer);
+    }
+
 }
