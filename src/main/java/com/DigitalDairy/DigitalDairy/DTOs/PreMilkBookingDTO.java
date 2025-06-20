@@ -13,6 +13,7 @@ public class PreMilkBookingDTO {
     private Long bookingId;
     private Long farmerId;
     private Long dairyId;
+    private Long amount;
     private LocalDate bookingDate;
     private PreMilkBooking.Shift shift;
     private BigDecimal quantityLitres;

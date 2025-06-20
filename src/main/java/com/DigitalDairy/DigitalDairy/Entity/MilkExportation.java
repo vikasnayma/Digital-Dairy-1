@@ -19,6 +19,10 @@ public class MilkExportation {
     private Long exportId;
 
     @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private PaymentEntity payment;
+
+    @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private User client;  // references users(user_id)
 

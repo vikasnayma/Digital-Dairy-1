@@ -4,9 +4,11 @@ package com.DigitalDairy.DigitalDairy.Services;
 import com.DigitalDairy.DigitalDairy.DTOs.MilkExportationDTO;
 import com.DigitalDairy.DigitalDairy.Entity.Dairy;
 import com.DigitalDairy.DigitalDairy.Entity.MilkExportation;
+import com.DigitalDairy.DigitalDairy.Entity.PaymentEntity;
 import com.DigitalDairy.DigitalDairy.Entity.User;
 import com.DigitalDairy.DigitalDairy.Repo.DairyRepository;
 import com.DigitalDairy.DigitalDairy.Repo.MilkExportationRepository;
+import com.DigitalDairy.DigitalDairy.Repo.PaymentRepository;
 import com.DigitalDairy.DigitalDairy.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class MilkExportationService {
     private final MilkExportationRepository milkExportationRepository;
     private final UserRepo userRepository;
     private final DairyRepository dairyRepository;
+    private final PaymentRepository paymentRepository;
 
     public MilkExportationDTO createExportation(MilkExportationDTO dto){
         User client = userRepository.findById(dto.getClientId())
@@ -29,6 +32,12 @@ public class MilkExportationService {
 
         Dairy dairy = dairyRepository.findById(dto.getDairyId())
                 .orElseThrow(() -> new RuntimeException("Dairy not found with ID: " + dto.getDairyId()));
+
+        PaymentEntity paymentEntity = null;
+        if (dto.getPaymentId() != null) {
+            paymentEntity = paymentRepository.findById(dto.getPaymentId())
+                    .orElseThrow(() -> new RuntimeException("Payment not found with ID: " + dto.getPaymentId()));
+        }
 
         BigDecimal totalAmount = dto.getQuantityLitres().multiply(dto.getRateApplied());
 
@@ -41,6 +50,7 @@ public class MilkExportationService {
                 .quantityLitres(dto.getQuantityLitres())
                 .rateApplied(dto.getRateApplied())
                 .totalAmount(totalAmount)
+                .payment(paymentEntity)
                 .shift(MilkExportation.Shift.valueOf(dto.getShift().toString()))
                 .build();
 
@@ -70,6 +80,7 @@ public class MilkExportationService {
                 .date(entity.getDate())
                 .shift(entity.getShift())
                 .quantityLitres(entity.getQuantityLitres())
+                .paymentId(entity.getPayment() != null ? entity.getPayment().getPaymentId() : null)
                 .fatContent(entity.getFatContent())
                 .qualityGrade(entity.getQualityGrade())
                 .rateApplied(entity.getRateApplied())

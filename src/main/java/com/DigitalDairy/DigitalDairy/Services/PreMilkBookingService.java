@@ -45,6 +45,11 @@ public class PreMilkBookingService {
                 .collect(Collectors.toList());
     }
 
+    public PreMilkBookingDTO getBookingById(Long bookingId){
+        PreMilkBooking booking = preMilkBookingRepository.findById(bookingId).orElseThrow();
+        return toDTO(booking);
+    }
+
     public List<PreMilkBookingDTO> getAllPreBookingsByFarmer(Long farmerId) {
         return preMilkBookingRepository.findByFarmer_UserId(farmerId)
                 .stream().map(this::toDTO)

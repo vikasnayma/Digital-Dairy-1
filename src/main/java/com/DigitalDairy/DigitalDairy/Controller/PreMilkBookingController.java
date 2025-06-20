@@ -39,4 +39,11 @@ public class PreMilkBookingController {
     public PreMilkBookingDTO updatePaymentStatus(@PathVariable Long id , @RequestParam("paymentStatus") PreMilkBooking.PaymentStatus paymentStatus){
         return preMilkBookingService.updatePaymentStatus(id , paymentStatus);
     }
+
+
+    @GetMapping("/booking/{bookingId}")
+    public PreMilkBookingDTO getBookingById(@PathVariable Long bookingId){
+        return preMilkBookingService.getBookingById(bookingId);
+    }
+
 }

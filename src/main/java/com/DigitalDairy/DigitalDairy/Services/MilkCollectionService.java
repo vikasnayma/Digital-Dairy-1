@@ -3,9 +3,11 @@ package com.DigitalDairy.DigitalDairy.Services;
 import com.DigitalDairy.DigitalDairy.DTOs.MilkCollectionDTO;
 import com.DigitalDairy.DigitalDairy.Entity.Dairy;
 import com.DigitalDairy.DigitalDairy.Entity.MilkCollection;
+import com.DigitalDairy.DigitalDairy.Entity.PaymentEntity;
 import com.DigitalDairy.DigitalDairy.Entity.User;
 import com.DigitalDairy.DigitalDairy.Repo.DairyRepository;
 import com.DigitalDairy.DigitalDairy.Repo.MilkCollectionRepository;
+import com.DigitalDairy.DigitalDairy.Repo.PaymentRepository;
 import com.DigitalDairy.DigitalDairy.Repo.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class MilkCollectionService {
     private final MilkCollectionRepository milkCollectionRepository;
     private final UserRepo userRepository;
     private final DairyRepository dairyRepository;
+    private final PaymentRepository paymentRepository;
 
     public MilkCollectionDTO addMilkCollection(MilkCollectionDTO dto) {
         User farmer = userRepository.findById(dto.getFarmerId())
@@ -29,6 +32,12 @@ public class MilkCollectionService {
 
         Dairy dairy = dairyRepository.findById(dto.getDairyId())
                 .orElseThrow(() -> new RuntimeException("Dairy not found with ID: " + dto.getDairyId()));
+
+        PaymentEntity paymentEntity = null;
+        if (dto.getPaymentId() != null) {
+            paymentEntity = paymentRepository.findById(dto.getPaymentId())
+                    .orElseThrow(() -> new RuntimeException("Payment not found with ID: " + dto.getPaymentId()));
+        }
 
         BigDecimal totalAmount = dto.getQuantityLitres().multiply(dto.getRateApplied());
 
@@ -39,6 +48,7 @@ public class MilkCollectionService {
                 .shift(MilkCollection.Shift.valueOf(dto.getShift().toString()))
                 .quantityLitres(dto.getQuantityLitres())
                 .fatContent(dto.getFatContent())
+                .payment(paymentEntity)
                 .qualityGrade(dto.getQualityGrade())
                 .rateApplied(dto.getRateApplied())
                 .totalAmount(totalAmount)
@@ -82,6 +92,7 @@ public class MilkCollectionService {
                 .dairyId(m.getDairy().getDairyId())
                 .date(m.getDate())
                 .shift(m.getShift())
+                .paymentId(m.getPayment() != null ? m.getPayment().getPaymentId() : null)
                 .quantityLitres(m.getQuantityLitres())
                 .fatContent(m.getFatContent())
                 .qualityGrade(m.getQualityGrade())

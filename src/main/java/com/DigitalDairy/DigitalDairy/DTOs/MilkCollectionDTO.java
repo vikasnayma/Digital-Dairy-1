@@ -14,6 +14,7 @@ public class MilkCollectionDTO {
     private Long collectionId;
     private Long farmerId;
     private Long dairyId;
+    private Long paymentId;
     private LocalDate date;
     private MilkCollection.Shift shift;
     private BigDecimal quantityLitres;

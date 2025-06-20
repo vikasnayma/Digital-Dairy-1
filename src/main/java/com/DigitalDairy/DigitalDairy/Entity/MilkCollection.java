@@ -27,6 +27,10 @@ public class MilkCollection {
     @JoinColumn(name = "dairy_id", nullable = false)
     private Dairy dairy;
 
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private PaymentEntity payment;
+
     @Column(nullable = false)
     private LocalDate date;
 
@@ -48,6 +52,14 @@ public class MilkCollection {
 
     @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
+
+    public PaymentEntity getPayment() {
+        return payment;
+    }
+
+    public void setPayment(PaymentEntity payment) {
+        this.payment = payment;
+    }
 
     public enum Shift {
         morning,

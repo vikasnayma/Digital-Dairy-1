@@ -16,6 +16,7 @@ public class MilkExportationDTO {
     private Long clientId;
     private Long dairyId;
     private LocalDate date;
+    private Long paymentId;
     private MilkExportation.Shift shift;
     private BigDecimal quantityLitres;
     private BigDecimal fatContent;
