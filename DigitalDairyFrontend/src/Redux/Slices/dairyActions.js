@@ -7,6 +7,7 @@ import {
   setPreMilkBookings,
   setMilkExportation,
   setAllFarmers,
+  setPayments,
 } from "./dairySlice";
 import axios from "axios";
 
@@ -289,7 +290,7 @@ export const fetchAllFarmersByDairy = (dairyId) => async (dispatch) => {
       `${BASE_URL}/auth/farmers/${dairyId}`
     );
     dispatch(setAllFarmers(res.data));
-    // console.log(res.data);
+    console.log(res.data);
     
     dispatch(setError(null));
   } catch (err) {
@@ -299,3 +300,61 @@ export const fetchAllFarmersByDairy = (dairyId) => async (dispatch) => {
   }
   dispatch(setLoading(false));
 };
+
+export const fetchMilkCollectionsByFarmerInOperator = (farmerId) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/milk-collections/farmer/${farmerId}`);
+    // localStorage.setItem('milkCollectionsCache', JSON.stringify(res.data));
+    console.log(res.data);
+
+    dispatch(setMilkCollection(res.data));
+    dispatch(setError(null));
+  } catch (err) {
+    dispatch(
+      setError(err.response?.data?.error || "Failed to fetch milk collections")
+    );
+  }
+  dispatch(setLoading(false));
+};
+
+
+export const fetchPaymentsByPayee = () => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("authUser"));
+  const payeeId = user.userId;
+  dispatch(setLoading(true));
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/payments/payee-payments/${payeeId}` ,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    console.log(res.data);
+    dispatch(setPayments(res.data));
+    dispatch(setError(null));
+  } catch (err) {
+    dispatch(
+      setError(err.response?.data?.error || "Failed to fetch milk collections")
+    );
+  }
+  dispatch(setLoading(false));
+};
+
+// export const fetchPreMilkBookingById = (bookingId) => async (dispatch) => {
+//   dispatch(setLoading(true));
+//   try {
+//     const res = await axios.get(`${BASE_URL}/pre-bookings/booking/${bookingId}`);
+//     // localStorage.setItem('milkCollectionsCache', JSON.stringify(res.data));
+//     // console.log(res.data);
+//     dispatch(setError(null));
+//   } catch (err) {
+//     dispatch(
+//       setError(err.response?.data?.error || "Failed to fetch milk collections")
+//     );
+//   }
+//   dispatch(setLoading(false));
+// };

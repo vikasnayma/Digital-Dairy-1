@@ -2,15 +2,14 @@
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from 'axios';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const PaymentMilkCollection = () => {
+const MilkExportationPayment = () => {
   const user = JSON.parse(localStorage.getItem("authUser"));
   const payerId = user.userId;
 
-  const { farmerId } = useParams();
   const { state } = useLocation();
-  const { referenceIds, amount } = state || {};
+  const { exportId , amount } = state || {};
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -19,7 +18,7 @@ const PaymentMilkCollection = () => {
 
   const navigate = useNavigate();
 
-  if (!referenceIds || !amount) {
+  if (!exportId || !amount) {
     return <div className="text-red-500 text-center mt-10">Missing payment details.</div>;
   }
 
@@ -42,14 +41,14 @@ const PaymentMilkCollection = () => {
   const onApprove = async (data) => {
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:8080/api/payments/capture?orderId=${data.orderID}`, {
+      const response = await axios.post(`http://localhost:8080/api/payments/exportation-payment/capture?orderId=${data.orderID}`, {
         orderId: data.orderID,
         payerId: payerId,
-        payeeId: farmerId,
+        payeeId: 1,
         amount: amount,
-        paymentFor: "milk_collection",
-        referenceIds: referenceIds
-      });
+        paymentFor: "milk_export",
+        referenceIds: [exportId],
+      });                                                                                                              
 
       if (response.data.status === 'success') {
         setSuccess(true);
@@ -57,7 +56,7 @@ const PaymentMilkCollection = () => {
         navigate('/dashboard/payment-success-operator', {
           state: {
             paymentDetails: response.data,
-            paymentFor: 'milk_collection'
+            paymentFor: 'milk_export'
           }
         });
       } else {
@@ -77,8 +76,7 @@ const PaymentMilkCollection = () => {
       <h2 className="text-2xl font-bold text-blue-800">Milk Collection Payment</h2>
 
       <div className="text-lg">
-        <p><strong>Farmer ID:</strong> {farmerId}</p>
-        <p><strong>Total Collections:</strong> {referenceIds.length}</p>
+        <p><strong>Exportation Id : </strong> {exportId}</p>
         <p><strong>Amount to Pay:</strong> ₹{amount}</p>
       </div>
 
@@ -115,6 +113,6 @@ const PaymentMilkCollection = () => {
   );
 };
 
-export default PaymentMilkCollection;
+export default MilkExportationPayment;
 
 

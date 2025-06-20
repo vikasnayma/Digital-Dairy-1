@@ -1,17 +1,15 @@
-
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from 'axios';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const PaymentMilkCollection = () => {
+const PreBookingPayment = () => {
   const user = JSON.parse(localStorage.getItem("authUser"));
   const payerId = user.userId;
 
-  const { farmerId } = useParams();
-  const { state } = useLocation();
-  const { referenceIds, amount } = state || {};
+  const { bookingId } = useParams();
 
+  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -19,8 +17,8 @@ const PaymentMilkCollection = () => {
 
   const navigate = useNavigate();
 
-  if (!referenceIds || !amount) {
-    return <div className="text-red-500 text-center mt-10">Missing payment details.</div>;
+  if (!bookingId) {
+    return <div className="text-red-500 text-center mt-10">Missing booking ID.</div>;
   }
 
   const createOrder = async () => {
@@ -42,13 +40,13 @@ const PaymentMilkCollection = () => {
   const onApprove = async (data) => {
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:8080/api/payments/capture?orderId=${data.orderID}`, {
+      const response = await axios.post(`http://localhost:8080/api/payments/pre-booking-payment/capture?orderId=${data.orderID}`, {
         orderId: data.orderID,
         payerId: payerId,
-        payeeId: farmerId,
+        payeeId: 1,
         amount: amount,
-        paymentFor: "milk_collection",
-        referenceIds: referenceIds
+        paymentFor: "pre_booking",
+        referenceIds: [bookingId] // Wrap in array if expecting list
       });
 
       if (response.data.status === 'success') {
@@ -57,7 +55,7 @@ const PaymentMilkCollection = () => {
         navigate('/dashboard/payment-success-operator', {
           state: {
             paymentDetails: response.data,
-            paymentFor: 'milk_collection'
+            paymentFor: 'pre_booking'
           }
         });
       } else {
@@ -72,14 +70,33 @@ const PaymentMilkCollection = () => {
     }
   };
 
+  const handleAmountChange = (e) => {
+    const val = e.target.value;
+    if (!isNaN(val)) {
+      setAmount(val);
+    }
+  };
+
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 shadow rounded space-y-6">
       <h2 className="text-2xl font-bold text-blue-800">Milk Collection Payment</h2>
 
-      <div className="text-lg">
-        <p><strong>Farmer ID:</strong> {farmerId}</p>
-        <p><strong>Total Collections:</strong> {referenceIds.length}</p>
-        <p><strong>Amount to Pay:</strong> ₹{amount}</p>
+      <div className="space-y-2 text-gray-700 text-lg">
+        <p><strong>Payer ID:</strong> {payerId}</p>
+        <p><strong>Booking ID:</strong> {bookingId}</p>
+
+        <div>
+          <label className="block mb-1 font-medium">Enter Amount (₹):</label>
+          <input
+            type="number"
+            min="1"
+            value={amount}
+            onChange={handleAmountChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter payment amount"
+            required
+          />
+        </div>
       </div>
 
       {error && <p className="text-red-600">{error}</p>}
@@ -87,7 +104,14 @@ const PaymentMilkCollection = () => {
 
       {!showPayment && !success && (
         <button
-          onClick={() => setShowPayment(true)}
+          onClick={() => {
+            if (amount && parseFloat(amount) > 0) {
+              setShowPayment(true);
+              setError(null);
+            } else {
+              setError("Please enter a valid amount.");
+            }
+          }}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
         >
           Pay Now
@@ -115,6 +139,4 @@ const PaymentMilkCollection = () => {
   );
 };
 
-export default PaymentMilkCollection;
-
-
+export default PreBookingPayment;

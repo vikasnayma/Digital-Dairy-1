@@ -19,6 +19,8 @@ import RevenueFarmer from "./farmer/pages/RevenueFarmer";
 import ProfileFarmer from "./farmer/pages/ProfileFarmer";
 import CollectionHistoryFarmer from './farmer/pages/CollectionHistoryFarmer'
 import PreBookingFarmer from './farmer/pages/PreBookingFarmer'
+import PreBookingPayment from "./farmer/pages/PreBookingPayment";
+
 
 import BookingsOperator from "./operator/pages/BookingsOperator";
 import ProfileOperator from "./operator/pages/ProfileOperator";
@@ -41,6 +43,7 @@ import HomeAdmin from "./admin/pages/HomeAdmin";
 import HomeClient from './clientdairy/pages/HomeClient'
 import ProfileClient from './clientdairy/pages/ProfileClient'
 import MilkExportationClient from './clientdairy/pages/MilkExportationClient'
+import MilkExportationPayment from "./clientdairy/pages/MilkExportationPayment";
 
 
 //Block login/signup if already logged in
@@ -59,11 +62,11 @@ const AutoRedirect = () => {
 
   switch (role) {
     case "farmer":
-      return <Navigate to="/dashboard/home-farmer" replace />;
+      return <Navigate to="/dashboard/profile-farmer" replace />;
     case "operator":
       return <Navigate to="/dashboard/home-operator" replace />;
       case "client":
-        return <Navigate to="/dashboard/home-client" replace />;
+        return <Navigate to="/dashboard/profile-client" replace />;
     case "admin":
       return <Navigate to="/dashboard/home-admin" replace />;
     // case "client":
@@ -110,6 +113,7 @@ const App = () => {
               <Route path="profile-farmer" element={<ProfileFarmer/>}></Route>
               <Route path="milk-collection-history-farmer" element={<CollectionHistoryFarmer />}></Route>
               <Route path="pre-booking-farmer" element={<PreBookingFarmer />}></Route>
+              <Route path="pre-booking-payment/:bookingId" element={<PreBookingPayment />}></Route>
             </Route>
 
             {/* Operator Routes */}
@@ -124,7 +128,7 @@ const App = () => {
               <Route path="farmer-details/:dairyId/:farmerId" element={<FarmerDetail/>}></Route>
               <Route path="milk-collection-operator" element={<MilkCollectionOperator/>}></Route>
               <Route path="exportation-operator" element={<MilkExportationOperator/>}></Route>
-              <Route path="milk-collection-operator/payment/:farmerId/:collectionId" element={<PaymentMilkCollection/>}></Route>
+              <Route path="milk-collection-operator/payment/:farmerId" element={<PaymentMilkCollection/>}></Route>
               <Route path="payment-success-operator" element={<PaymentSuccessOperator/>}></Route>
             </Route>
 
@@ -147,6 +151,7 @@ const App = () => {
               <Route path="home-client" element={<HomeClient/>}></Route>
               <Route path="exportation-client" element={<MilkExportationClient/>}></Route>
               <Route path="profile-client" element={<ProfileClient/>}></Route>
+              <Route path="exportation-payment" element={<MilkExportationPayment/>}></Route>
             </Route>
           </Routes>
         </div>

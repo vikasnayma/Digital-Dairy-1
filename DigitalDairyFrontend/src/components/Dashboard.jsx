@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   const menuMap = {
     farmer: [
-      { name: "Home", path: "/dashboard/home-farmer", icon: <FaHome /> },
+      // { name: "Home", path: "/dashboard/home-farmer", icon: <FaHome /> },
       { name: "Milk Collection History", path: "/dashboard/milk-collection-history-farmer", icon: <FaClipboardList /> },
       { name: "Pre Milk Bookings", path: "/dashboard/pre-booking-farmer", icon: <FaClipboardList /> },
       { name: "Revenue", path: "/dashboard/revenue-farmer", icon: <FaMoneyBill /> },
@@ -60,7 +60,7 @@ const Dashboard = () => {
       { name: "Profile", path: "/dashboard/profile-admin", icon: <FaUser /> },
     ],
     client: [
-      { name: "Home", path: "/dashboard/home-client", icon: <FaHome /> },
+      // { name: "Home", path: "/dashboard/home-client", icon: <FaHome /> },
       { name: "Collection History", path: "/dashboard/exportation-client", icon: <FaClipboardList /> },
       { name: "Profile", path: "/dashboard/profile-client", icon: <FaUser /> },
       

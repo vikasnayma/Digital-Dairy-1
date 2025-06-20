@@ -42,8 +42,9 @@ export default function AllFarmers() {
             >
               <div>
                 <p className="text-lg font-medium text-gray-800">{farmer.name}</p>
-                <p className="text-sm text-gray-500">Phone: {farmer.phone}</p>
-                <p className="text-sm text-gray-500">Email: {farmer.email}</p>
+                <p className="text-md font-medium text-gray-800">ID : {farmer.user_id}</p>
+                <p className="text-sm text-gray-700">Phone : {farmer.phone}</p>
+                <p className="text-sm text-gray-700">Email : {farmer.email}</p>
               </div>
               <button
                 onClick={() => handleViewDetails(farmer.user_id)}

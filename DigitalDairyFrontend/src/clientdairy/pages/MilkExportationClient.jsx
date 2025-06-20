@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMilkExportationsByClient } from "../../Redux/Slices/dairyActions"; 
-
+import { fetchMilkExportationsByClient } from "../../Redux/Slices/dairyActions";
+import { useNavigate } from "react-router-dom";
 
 const MilkExportationClient = () => {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { milkExportation, loading, error } = useSelector((state) => state.milkExportation);
   const [filter, setFilter] = useState({ date: "", shift: "" });
 
@@ -21,6 +21,12 @@ const MilkExportationClient = () => {
     }));
   };
 
+  const handlePayClick = (exportId, totalAmount) => {
+    navigate("/dashboard/exportation-payment", {
+      state: { exportId, amount: totalAmount }
+    });
+  };
+
   const filteredCollections = milkExportation?.filter((entry) =>
     (!filter.date || entry.date === filter.date) &&
     (!filter.shift || entry.shift.toLowerCase() === filter.shift.toLowerCase())
@@ -31,7 +37,7 @@ const MilkExportationClient = () => {
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">
         Milk Exportation History
       </h2>
-  
+
       {/* Filters */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div>
@@ -58,11 +64,11 @@ const MilkExportationClient = () => {
           </select>
         </div>
       </div>
-  
+
       {/* Loader and Error */}
-      {loading}
-      {error}
-  
+      {loading && <p className="text-center text-blue-500">Loading exportations...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
       {/* Table */}
       {!loading && !error && (
         <div className="overflow-x-auto border border-gray-200 rounded-md shadow-sm">
@@ -75,6 +81,7 @@ const MilkExportationClient = () => {
                 <th className="px-4 py-3 border">Fat %</th>
                 <th className="px-4 py-3 border">Rate (₹/L)</th>
                 <th className="px-4 py-3 border">Total Amount (₹)</th>
+                <th className="px-4 py-3 border text-center">Payment</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-100">
@@ -86,13 +93,29 @@ const MilkExportationClient = () => {
                     <td className="px-4 py-2 border">{entry.quantityLitres}</td>
                     <td className="px-4 py-2 border">{entry.fatContent}</td>
                     <td className="px-4 py-2 border">{entry.rateApplied}</td>
-                    <td className="px-4 py-2 border">{entry.totalAmount}</td>
+                    <td className="px-4 py-2 border font-semibold text-blue-700">
+                      ₹{entry.totalAmount}
+                    </td>
+                    <td className="px-4 py-2 border text-center">
+                      {entry.paymentId ? (
+                        <span className="inline-block px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
+                          Paid
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handlePayClick(entry.exportId, entry.totalAmount)}
+                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded text-sm shadow-sm"
+                        >
+                          Pay
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td className="px-4 py-4 text-center text-gray-500" colSpan="6">
-                    No Exportations found for selected filters.
+                  <td className="px-4 py-4 text-center text-gray-500" colSpan="7">
+                    No exportations found for selected filters.
                   </td>
                 </tr>
               )}
@@ -102,7 +125,6 @@ const MilkExportationClient = () => {
       )}
     </div>
   );
-  
 };
 
 export default MilkExportationClient;
