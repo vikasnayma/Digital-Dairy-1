@@ -31,6 +31,7 @@ import PaymentMilkCollection from './operator/pages/PaymentMilkCollection';
 import PaymentSuccessOperator from "./operator/pages/PaymentSuccessOperator";
 import AllFarmers from "./operator/pages/AllFarmers";
 import FarmerDetail from "./operator/pages/FarmerDetail";
+import MilkRates from "./operator/pages/MilkRates";
 
 
 
@@ -130,6 +131,7 @@ const App = () => {
               <Route path="exportation-operator" element={<MilkExportationOperator/>}></Route>
               <Route path="milk-collection-operator/payment/:farmerId" element={<PaymentMilkCollection/>}></Route>
               <Route path="payment-success-operator" element={<PaymentSuccessOperator/>}></Route>
+              <Route path="milk-rates" element={<MilkRates/>}></Route>
             </Route>
 
             {/* Admin Routes */}

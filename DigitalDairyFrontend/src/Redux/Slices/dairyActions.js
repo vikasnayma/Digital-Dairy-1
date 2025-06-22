@@ -8,6 +8,7 @@ import {
   setMilkExportation,
   setAllFarmers,
   setPayments,
+  setMilkRates,
 } from "./dairySlice";
 import axios from "axios";
 
@@ -344,17 +345,34 @@ export const fetchPaymentsByPayee = () => async (dispatch) => {
   dispatch(setLoading(false));
 };
 
-// export const fetchPreMilkBookingById = (bookingId) => async (dispatch) => {
-//   dispatch(setLoading(true));
-//   try {
-//     const res = await axios.get(`${BASE_URL}/pre-bookings/booking/${bookingId}`);
-//     // localStorage.setItem('milkCollectionsCache', JSON.stringify(res.data));
-//     // console.log(res.data);
-//     dispatch(setError(null));
-//   } catch (err) {
-//     dispatch(
-//       setError(err.response?.data?.error || "Failed to fetch milk collections")
-//     );
-//   }
-//   dispatch(setLoading(false));
-// };
+export const fetchMilkRatesByDairyID = (dairyId) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const res = await axios.get(`${BASE_URL}/milk-rates/dairy/${dairyId}`);
+    dispatch(setMilkRates(res.data));
+    // localStorage.setItem('milkCollectionsCache', JSON.stringify(res.data));
+    console.log(res.data);
+    dispatch(setError(null));
+  } catch (err) {
+    dispatch(
+      setError(err.response?.data?.error || "Failed to fetch milk collections")
+    );
+  }
+  dispatch(setLoading(false));
+};
+
+
+export const addMilkRate = (milkRateData) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const res = await axios.post(`${BASE_URL}/milk-rates` , milkRateData );
+    // localStorage.setItem('milkCollectionsCache', JSON.stringify(res.data));
+    console.log(res.data);
+    dispatch(setError(null));
+  } catch (err) {
+    dispatch(
+      setError(err.response?.data?.error || "Failed to fetch milk collections")
+    );
+  }
+  dispatch(setLoading(false));
+};

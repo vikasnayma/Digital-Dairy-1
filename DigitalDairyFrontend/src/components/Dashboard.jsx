@@ -51,6 +51,7 @@ const Dashboard = () => {
       { name: "Farmers", path: "/dashboard/farmers-operator", icon: <FaUser /> },
       { name: "Milk Collection", path: "/dashboard/milk-collection-operator", icon: <FaClipboardList /> },
       { name: "Milk Exportation", path: "/dashboard/exportation-operator", icon: <FaClipboardList /> },
+      { name: "Milk Rates", path: "/dashboard/milk-rates", icon: <FaClipboardList /> },
       { name: "Profile", path: "/dashboard/profile-operator", icon: <FaUser /> },
     ],
     admin: [
@@ -71,98 +72,103 @@ const Dashboard = () => {
   const menuItems = menuMap[role] || [];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Mobile overlay */}
-      {isMobile && isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={toggleSidebar}
-        />
-      )}
+    <div className="flex h-screen bg-[#fefae0] text-[#3e2c23] font-sans relative overflow-hidden">
+  {/* Overlay for mobile */}
+  {isMobile && isOpen && (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 z-40"
+      onClick={toggleSidebar}
+    />
+  )}
 
-      {/* Sidebar */}
-      <div
-        className={`bg-gradient-to-b from-gray-800 to-gray-900 text-white h-full fixed top-0 left-0 ${
-          isOpen ? "w-64" : "w-20"
-        } transition-all duration-300 z-50 shadow-xl`}
-      >
-        <div className="h-full flex flex-col p-4">
-          {/* Toggle Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className={`text-xl font-bold ${isOpen ? "block" : "hidden"}`}>
-              Dashboard
-            </h1>
-            {isOpen ? (
-              <FaTimes
-                className="text-xl cursor-pointer hover:text-red-400 transition-colors"
-                onClick={toggleSidebar}
-              />
-            ) : (
-              <FaBars
-                className="text-xl cursor-pointer hover:text-red-400 transition-colors"
-                onClick={toggleSidebar}
-              />
-            )}
-          </div>
-
-          {/* Sidebar Menu */}
-          <ul className="space-y-2 mt-4">
-            {menuItems.map((item, idx) => (
-              <li key={idx}>
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-3 rounded-md transition-all duration-200 ${
-                      isActive
-                        ? "bg-red-600 text-white shadow-md"
-                        : "hover:bg-gray-700 hover:text-red-400"
-                    }`
-                  }
-                >
-                  <span className="text-xl">{item.icon}</span>
-                  <span className={`${isOpen ? "block" : "hidden"}`}>
-                    {item.name}
-                  </span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div
-        className={`flex-1 flex flex-col transition-all duration-300 ${
-          isOpen ? "ml-0 md:ml-64" : "ml-0 md:ml-20"
-        }`}
-      >
-        {/* Topbar */}
-        <div
-          className={`bg-gradient-to-r from-gray-800 to-gray-900 text-white h-16 flex justify-between items-center px-4 sm:px-6 shadow-md fixed top-0 right-0 ${
-            isOpen ? "left-0 md:left-64" : "left-0 md:left-20"
-          } z-40 transition-all duration-300`}
+  {/* Sidebar */}
+  <div
+    className={`fixed top-0 left-0 h-full transition-all duration-300 z-50 shadow-xl 
+      ${isOpen ? "w-64" : "w-20"} 
+      bg-[#7f5539] text-white rounded-tr rounded-br-3xl`}
+  >
+    <div className="h-full flex flex-col">
+      {/* Toggle Header */}
+      <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-[#b08968]">
+        <h1
+          className={`text-2xl font-bold transition-all duration-300 ${
+            isOpen ? "block" : "hidden"
+          }`}
         >
-          <div className="flex items-center">
-            {isMobile && (
-              <FaBars
-                className="text-xl mr-4 cursor-pointer hover:text-red-400 transition-colors"
-                onClick={toggleSidebar}
-              />
-            )}
-            <h1 className="text-lg sm:text-xl font-bold">
-              Welcome, {user?.name || "User"}
-            </h1>
-          </div>
-
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full text-sm sm:text-base transition-colors duration-200 shadow hover:shadow-lg"
-          >
-            Logout
-          </button>
-        </div>
+          Dashboard
+        </h1>
+        <button
+          onClick={toggleSidebar}
+          className="text-xl hover:text-[#fefae0] transition"
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
+
+      {/* Menu */}
+      <ul className="flex-1 px-4 py-6 space-y-3">
+        {menuItems.map((item, idx) => (
+          <li key={idx}>
+            <NavLink
+              to={item.path}
+              className={({ isActive }) =>
+                `flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ${
+                  isActive
+                    ? "bg-[#9c6644] text-white shadow-inner"
+                    : "hover:bg-[#9c6644]/90 hover:text-[#fff3cc]"
+                }`
+              }
+            >
+              <span className="text-xl">{item.icon}</span>
+              <span
+                className={`text-base font-medium transition-opacity duration-200 ${
+                  isOpen ? "opacity-100" : "opacity-0 hidden"
+                }`}
+              >
+                {item.name}
+              </span>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
     </div>
+  </div>
+
+  {/* Main Content Area */}
+  <div
+    className={`flex-1 flex flex-col transition-all duration-300 h-full ${
+      isOpen ? "ml-64" : "ml-20"
+    }`}
+  >
+    {/* Topbar */}
+    <div
+      className="bg-[#9c6644] text-white h-16 flex justify-between items-center px-6 shadow-md 
+      fixed top-0 right-0 z-40 transition-all duration-300 rounded-bl-3xl"
+      style={{ left: isOpen ? "16rem" : "5rem" }}
+    >
+      <div className="flex items-center gap-4">
+        {isMobile && (
+          <FaBars
+            className="text-xl cursor-pointer hover:text-[#fefae0]"
+            onClick={toggleSidebar}
+          />
+        )}
+        <h1 className="text-lg sm:text-xl font-semibold tracking-wide">
+          Welcome, {user?.name || "User"}
+        </h1>
+      </div>
+
+      <button
+        onClick={handleLogout}
+        className="bg-[#b08968] hover:bg-[#a47148] text-white px-4 py-2 rounded-full 
+        text-sm sm:text-base transition-all duration-200 shadow-md"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 };
 

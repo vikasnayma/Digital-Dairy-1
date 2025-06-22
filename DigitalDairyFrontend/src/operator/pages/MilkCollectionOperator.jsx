@@ -78,147 +78,214 @@ const MilkCollectionOperator = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto mt-12 space-y-12 px-4">
+    <div className="max-w-6xl mx-auto mt-8 space-y-8 px-4 animate-fadeIn">
       {/* === Add Collection Form === */}
-      <div className="bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
-        <h2 className="text-3xl font-bold text-blue-800 mb-8 text-center tracking-tight">Add Milk Collection</h2>
+      <div className="bg-amber-50 p-8 rounded-2xl shadow-lg border border-amber-100 transform transition-all hover:shadow-xl">
+        <h2 className="text-3xl font-bold text-amber-900 mb-6 text-center tracking-tight font-serif">
+          Add Milk Collection
+          <span className="block h-1 w-20 bg-amber-300 mx-auto mt-2 rounded-full"></span>
+        </h2>
         
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <input
-            name="farmerId"
-            value={formData.farmerId}
-            onChange={handleChange}
-            required
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Farmer ID"
-          />
-          <input
-            name="dairyId"
-            value={formData.dairyId}
-            onChange={handleChange}
-            readOnly
-            className="px-4 py-2 border border-gray-200 bg-gray-100 rounded-xl shadow-sm cursor-not-allowed"
-            placeholder="Dairy ID"
-          />
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            required
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <select
-            name="shift"
-            value={formData.shift}
-            onChange={handleChange}
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="morning">Morning</option>
-            <option value="evening">Evening</option>
-          </select>
-          <input
-            type="number"
-            name="quantityLitres"
-            value={formData.quantityLitres}
-            step="0.1"
-            onChange={handleChange}
-            required
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Quantity (L)"
-          />
-          <input
-            type="number"
-            name="fatContent"
-            value={formData.fatContent}
-            step="0.1"
-            onChange={handleChange}
-            required
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Fat Content (%)"
-          />
-          <input
-            name="qualityGrade"
-            value={formData.qualityGrade}
-            onChange={handleChange}
-            required
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Quality Grade"
-          />
-          <input
-            type="number"
-            name="rateApplied"
-            value={formData.rateApplied}
-            step="0.1"
-            onChange={handleChange}
-            required
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Rate (₹/L)"
-          />
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Farmer ID</label>
+            <input
+              name="farmerId"
+              value={formData.farmerId}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+              placeholder="Enter Farmer ID"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Dairy ID</label>
+            <input
+              name="dairyId"
+              value={formData.dairyId}
+              onChange={handleChange}
+              readOnly
+              className="w-full px-4 py-3 border border-amber-100 bg-amber-50 rounded-lg shadow-sm cursor-not-allowed"
+              placeholder="Dairy ID"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Shift</label>
+            <select
+              name="shift"
+              value={formData.shift}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+            >
+              <option value="morning">Morning</option>
+              <option value="evening">Evening</option>
+            </select>
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Quantity (L)</label>
+            <input
+              type="number"
+              name="quantityLitres"
+              value={formData.quantityLitres}
+              step="0.1"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+              placeholder="0.0"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Fat Content (%)</label>
+            <input
+              type="number"
+              name="fatContent"
+              value={formData.fatContent}
+              step="0.1"
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+              placeholder="0.0"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Quality Grade</label>
+            <input
+              name="qualityGrade"
+              value={formData.qualityGrade}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+              placeholder="Grade"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Rate Applied</label>
+            <input
+              type="number"
+              name="rateApplied"
+              value={formData.rateApplied}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+              placeholder="0.0"
+            />
+          </div>
+          
           <button
             type="submit"
             disabled={loading}
-            className="col-span-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold tracking-wide shadow-md transition"
+            className="col-span-full mt-4 bg-amber-700 hover:bg-amber-800 text-white py-3 rounded-lg font-semibold tracking-wide shadow-md transition-all transform hover:scale-[1.01] active:scale-[0.99]"
           >
-            {loading ? 'Saving...' : 'Submit Collection'}
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </span>
+            ) : 'Submit Collection'}
           </button>
         </form>
   
-        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
-        {success && <p className="text-green-600 mt-4 text-center">Milk collection added successfully!</p>}
+        {error && (
+          <div className="mt-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded animate-shake">
+            <p className="text-center">{error}</p>
+          </div>
+        )}
+        {success && (
+          <div className="mt-4 p-3 bg-green-100 border-l-4 border-green-500 text-green-700 rounded animate-fadeIn">
+            <p className="text-center">Milk collection added successfully!</p>
+          </div>
+        )}
       </div>
   
       {/* === Filter & Collection List === */}
-      <div className="bg-white p-10 rounded-3xl shadow-xl border border-gray-100">
-        <h2 className="text-2xl font-bold text-blue-700 mb-8 text-center">Milk Collection Records</h2>
+      <div className="bg-amber-50 p-8 rounded-2xl shadow-lg border border-amber-100 transform transition-all hover:shadow-xl">
+        <h2 className="text-2xl font-bold text-amber-900 mb-6 text-center font-serif">
+          Milk Collection Records
+          <span className="block h-1 w-16 bg-amber-300 mx-auto mt-2 rounded-full"></span>
+        </h2>
   
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <input
-            type="date"
-            name="date"
-            value={filter.date}
-            onChange={handleFilterChange}
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <select
-            name="shift"
-            value={filter.shift}
-            onChange={handleFilterChange}
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Shifts</option>
-            <option value="morning">Morning</option>
-            <option value="evening">Evening</option>
-          </select>
-          <input
-            type="text"
-            name="farmerId"
-            value={filter.farmerId}
-            onChange={handleFilterChange}
-            placeholder="Filter by Farmer ID"
-            className="px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Filter by Date</label>
+            <input
+              type="date"
+              name="date"
+              value={filter.date}
+              onChange={handleFilterChange}
+              className="w-full px-4 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+            />
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Filter by Shift</label>
+            <select
+              name="shift"
+              value={filter.shift}
+              onChange={handleFilterChange}
+              className="w-full px-4 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+            >
+              <option value="">All Shifts</option>
+              <option value="morning">Morning</option>
+              <option value="evening">Evening</option>
+            </select>
+          </div>
+          
+          <div className="space-y-1">
+            <label className="text-amber-800 font-medium">Filter by Farmer ID</label>
+            <input
+              type="text"
+              name="farmerId"
+              value={filter.farmerId}
+              onChange={handleFilterChange}
+              placeholder="Enter Farmer ID"
+              className="w-full px-4 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+            />
+          </div>
         </div>
   
         {filteredCollections?.length > 0 ? (
-          <ul className="space-y-4 max-h-[400px] overflow-y-auto">
+          <ul className="space-y-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-amber-100">
             {filteredCollections.map((entry) => (
-              <li key={entry.collectionId} className="p-6 border border-gray-200 rounded-xl bg-gray-50 shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-gray-800 text-sm md:text-base">
-                  <p><span className="font-semibold">Farmer ID:</span> {entry.farmerId}</p>
-                  <p><span className="font-semibold">Date:</span> {entry.date}</p>
-                  <p><span className="font-semibold">Shift:</span> {entry.shift}</p>
-                  <p><span className="font-semibold">Quantity:</span> {entry.quantityLitres} L</p>
-                  <p><span className="font-semibold">Fat %:</span> {entry.fatContent}</p>
-                  <p><span className="font-semibold">Grade:</span> {entry.qualityGrade}</p>
-                  <p><span className="font-semibold">Rate:</span> ₹{entry.rateApplied}</p>
-                  <p><span className="font-semibold">Total:</span> ₹{entry.totalAmount}</p>
+              <li 
+                key={entry.collectionId} 
+                className="p-5 border border-amber-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:border-amber-200"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-amber-900 text-sm md:text-base">
+                  <p><span className="font-semibold text-amber-700">Farmer ID:</span> {entry.farmerId}</p>
+                  <p><span className="font-semibold text-amber-700">Date:</span> {entry.date}</p>
+                  <p><span className="font-semibold text-amber-700">Shift:</span> <span className="capitalize">{entry.shift}</span></p>
+                  <p><span className="font-semibold text-amber-700">Quantity:</span> <span className="text-amber-600">{entry.quantityLitres} L</span></p>
+                  <p><span className="font-semibold text-amber-700">Fat %:</span> <span className="text-amber-600">{entry.fatContent}</span></p>
+                  <p><span className="font-semibold text-amber-700">Grade:</span> <span className="uppercase font-medium">{entry.qualityGrade}</span></p>
+                  <p><span className="font-semibold text-amber-700">Rate:</span> ₹{entry.rateApplied}</p>
+                  <p><span className="font-semibold text-amber-700">Total:</span> <span className="font-bold">₹{entry.totalAmount}</span></p>
                   <p>
-                    <span className="font-semibold">Status:</span>{' '}
+                    <span className="font-semibold text-amber-700">Status:</span>{' '}
                     {entry.paymentId ? (
-                      <span className="text-green-600 font-medium">Paid</span>
+                      <span className="text-green-600 font-medium bg-green-100 px-2 py-1 rounded-full text-xs">Paid</span>
                     ) : (
-                      <span className="text-yellow-600 font-medium">Unpaid</span>
+                      <span className="text-amber-600 font-medium bg-amber-100 px-2 py-1 rounded-full text-xs">Unpaid</span>
                     )}
                   </p>
                 </div>
@@ -226,7 +293,9 @@ const MilkCollectionOperator = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-center mt-4">No milk collection entries found.</p>
+          <div className="text-center p-8 bg-amber-100 rounded-xl border border-amber-200 animate-pulse">
+            <p className="text-amber-800">No milk collection entries found.</p>
+          </div>
         )}
       </div>
     </div>

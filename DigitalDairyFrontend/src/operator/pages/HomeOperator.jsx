@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDairyDetails } from '../../Redux/Slices/dairyActions';
@@ -12,36 +11,50 @@ const HomeOperator = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <p className="text-center mt-4 text-blue-600 font-semibold">Loading dairy details...</p>;
+    return (
+      <p className="text-center mt-8 text-amber-700 font-medium animate-pulse">
+        Loading dairy details...
+      </p>
+    );
   }
 
   if (error) {
-    return <p className="text-center mt-4 text-red-600 font-semibold">{error}</p>;
+    return (
+      <p className="text-center mt-8 text-red-600 font-medium bg-amber-50 p-3 rounded-lg border border-amber-200">
+        {error}
+      </p>
+    );
   }
 
   if (!dairy) {
-    return <p className="text-center mt-4 text-gray-500">No dairy found for this operator.</p>;
+    return (
+      <p className="text-center mt-8 text-stone-500 bg-amber-50 p-4 rounded-lg shadow-inner">
+        No dairy found for this operator.
+      </p>
+    );
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">Dairy Details</h2>
-      <div className="space-y-2">
-        <div>
-          <span className="font-semibold">Name: </span>
-          <span>{dairy.name}</span>
+    <div className="max-w-md mx-auto mt-20 p-6 bg-amber-50 shadow-lg rounded-xl border border-amber-100 transition-all hover:shadow-xl">
+      <h2 className="text-2xl font-bold text-stone-800 mb-4 pb-2 border-b border-amber-200">
+        Dairy Details
+      </h2>
+      <div className="space-y-3">
+        <div className="flex items-center">
+          <span className="font-semibold text-stone-700 w-28">Name: </span>
+          <span className="text-stone-600">{dairy.name}</span>
         </div>
-        <div>
-          <span className="font-semibold">Dairy Id: </span>
-          <span>{dairy.dairyId}</span>
+        <div className="flex items-center">
+          <span className="font-semibold text-stone-700 w-28">Dairy Id: </span>
+          <span className="text-stone-600">{dairy.dairyId}</span>
         </div>
-        <div>
-          <span className="font-semibold">Operator Id : </span>
-          <span>{dairy.operatorId}</span>
+        <div className="flex items-center">
+          <span className="font-semibold text-stone-700 w-28">Operator Id: </span>
+          <span className="text-stone-600">{dairy.operatorId}</span>
         </div>
-        <div>
-          <span className="font-semibold">Location: </span>
-          <span>{dairy.location}</span>
+        <div className="flex items-center">
+          <span className="font-semibold text-stone-700 w-28">Location: </span>
+          <span className="text-stone-600">{dairy.location}</span>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import preMilkBookingsReducer from '../Redux/Slices/dairySlice'
 import milkExportationReducer from '../Redux/Slices/dairySlice'
 import AllFarmersReducer from '../Redux/Slices/dairySlice'
 import paymentsReducer from '../Redux/Slices/dairySlice'
-
+import milkRatesReducer from '../Redux/Slices/dairySlice'
 
 
 
@@ -17,5 +17,6 @@ export const store = configureStore({
     milkExportation : milkExportationReducer,
     allFarmers : AllFarmersReducer,
     payments : paymentsReducer,
+    milkRates : milkRatesReducer,
   },
 })

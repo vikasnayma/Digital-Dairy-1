@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from 'axios';
@@ -20,7 +19,11 @@ const PaymentMilkCollection = () => {
   const navigate = useNavigate();
 
   if (!referenceIds || !amount) {
-    return <div className="text-red-500 text-center mt-10">Missing payment details.</div>;
+    return (
+      <div className="text-red-600 bg-amber-50 p-4 rounded-lg border border-amber-200 max-w-md mx-auto mt-10 animate-fade-in">
+        Missing payment details.
+      </div>
+    );
   }
 
   const createOrder = async () => {
@@ -31,7 +34,7 @@ const PaymentMilkCollection = () => {
         headers: { 'Content-Type': 'application/json' }
       });
 
-      return response.data.id; // PayPal order ID
+      return response.data.id;
     } catch (err) {
       console.error('Error creating order:', err);
       setError("Failed to create PayPal order.");
@@ -54,12 +57,14 @@ const PaymentMilkCollection = () => {
       if (response.data.status === 'success') {
         setSuccess(true);
         setShowPayment(false);
-        navigate('/dashboard/payment-success-operator', {
-          state: {
-            paymentDetails: response.data,
-            paymentFor: 'milk_collection'
-          }
-        });
+        setTimeout(() => {
+          navigate('/dashboard/payment-success-operator', {
+            state: {
+              paymentDetails: response.data,
+              paymentFor: 'milk_collection'
+            }
+          });
+        }, 1500); // Delay for success animation
       } else {
         setError('Payment capture failed. Please try again.');
       }
@@ -73,48 +78,94 @@ const PaymentMilkCollection = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 shadow rounded space-y-6">
-      <h2 className="text-2xl font-bold text-blue-800">Milk Collection Payment</h2>
+    <div className="max-w-xl mx-auto mt-10 bg-amber-50 p-6 rounded-xl shadow-lg border border-amber-100 space-y-6 animate-fade-in-up">
+      <h2 className="text-2xl font-bold text-stone-800 pb-2 border-b border-amber-200">
+        Milk Collection Payment
+      </h2>
 
-      <div className="text-lg">
-        <p><strong>Farmer ID:</strong> {farmerId}</p>
-        <p><strong>Total Collections:</strong> {referenceIds.length}</p>
-        <p><strong>Amount to Pay:</strong> ₹{amount}</p>
+      <div className="space-y-3 bg-amber-100/30 p-4 rounded-lg">
+        <p className="flex items-center gap-2">
+          <span className="font-semibold text-stone-700 min-w-[120px]">Farmer ID:</span>
+          <span className="text-stone-600">{farmerId}</span>
+        </p>
+        <p className="flex items-center gap-2">
+          <span className="font-semibold text-stone-700 min-w-[120px]">Collections:</span>
+          <span className="text-stone-600">{referenceIds.length}</span>
+        </p>
+        <p className="flex items-center gap-2">
+          <span className="font-semibold text-stone-700 min-w-[120px]">Amount:</span>
+          <span className="text-xl font-bold text-amber-700">₹{amount}</span>
+        </p>
       </div>
 
-      {error && <p className="text-red-600">{error}</p>}
-      {loading && <p className="text-blue-600">Processing Payment...</p>}
+      {error && (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 animate-shake">
+          <p className="text-red-600 font-medium">{error}</p>
+        </div>
+      )}
 
-      {!showPayment && !success && (
+      {loading && (
+        <div className="flex flex-col items-center gap-2 py-4">
+          <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-amber-700 font-medium">Processing Payment...</p>
+        </div>
+      )}
+
+      {success && (
+        <div className="bg-green-50 border-l-4 border-green-500 p-4 animate-pulse">
+          <p className="text-green-700 font-medium">Payment successful! Redirecting...</p>
+        </div>
+      )}
+
+      {!showPayment && !success && !loading && (
         <button
           onClick={() => setShowPayment(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          className="bg-amber-700 hover:bg-amber-800 text-amber-50 px-6 py-3 rounded-lg font-medium
+                    transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-95
+                    focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50"
         >
-          Pay Now
+          Proceed to Payment
         </button>
       )}
 
       {showPayment && (
-        <PayPalScriptProvider options={{ "client-id": "AdM0I7Z4hbUK6yPDVTN0apHNzL8g5fzIPLOsBlWCxHdMs47lO4iFeR5Zb4qz1_z_NAXJPJgNHDzFlPCV", currency: "USD" }}>
-          <PayPalButtons
-            style={{ layout: "vertical" }}
-            createOrder={createOrder}
-            onApprove={onApprove}
-            onError={(err) => {
-              console.error("PayPal error:", err);
-              setError("Something went wrong during PayPal transaction.");
-            }}
-            onCancel={() => {
-              setShowPayment(false);
-              setError('Payment was cancelled.');
-            }}
-          />
-        </PayPalScriptProvider>
+        <div className="animate-fade-in">
+          <PayPalScriptProvider options={{ "client-id": "AdM0I7Z4hbUK6yPDVTN0apHNzL8g5fzIPLOsBlWCxHdMs47lO4iFeR5Zb4qz1_z_NAXJPJgNHDzFlPCV", currency: "USD" }}>
+            <PayPalButtons
+              style={{ 
+                layout: "vertical",
+                color: "gold",
+                shape: "pill",
+                label: "pay",
+                height: 45
+              }}
+              createOrder={createOrder}
+              onApprove={onApprove}
+              onError={(err) => {
+                console.error("PayPal error:", err);
+                setError("Something went wrong during PayPal transaction.");
+              }}
+              onCancel={() => {
+                setShowPayment(false);
+                setError('Payment was cancelled.');
+              }}
+            />
+          </PayPalScriptProvider>
+        </div>
       )}
+
+      <button
+        onClick={() => navigate(-1)}
+        className="text-stone-600 hover:text-stone-800 font-medium transition-all
+                  hover:underline flex items-center gap-1"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+        </svg>
+        Back to previous page
+      </button>
     </div>
   );
 };
 
 export default PaymentMilkCollection;
-
-

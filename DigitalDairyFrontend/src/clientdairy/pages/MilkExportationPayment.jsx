@@ -72,28 +72,48 @@ const MilkExportationPayment = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 shadow rounded space-y-6">
-      <h2 className="text-2xl font-bold text-blue-800">Milk Collection Payment</h2>
-
-      <div className="text-lg">
-        <p><strong>Exportation Id : </strong> {exportId}</p>
-        <p><strong>Amount to Pay:</strong> ₹{amount}</p>
+    <div className="max-w-xl mx-auto mt-16 bg-white p-8 shadow-2xl rounded-3xl space-y-8 border border-gray-100">
+      <h2 className="text-3xl font-extrabold text-center text-blue-800 tracking-tight">
+        💳 Milk Collection Payment
+      </h2>
+  
+      <div className="text-gray-700 text-lg space-y-1">
+        <p>
+          <span className="font-semibold">Exportation ID:</span> {exportId}
+        </p>
+        <p>
+          <span className="font-semibold">Amount to Pay:</span> ₹{amount}
+        </p>
       </div>
-
-      {error && <p className="text-red-600">{error}</p>}
-      {loading && <p className="text-blue-600">Processing Payment...</p>}
-
+  
+      {error && (
+        <p className="text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg text-sm font-medium">
+          ❌ {error}
+        </p>
+      )}
+  
+      {loading && (
+        <p className="text-blue-600 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg text-sm font-medium">
+          ⏳ Processing Payment...
+        </p>
+      )}
+  
       {!showPayment && !success && (
         <button
           onClick={() => setShowPayment(true)}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold shadow-md transition"
         >
           Pay Now
         </button>
       )}
-
+  
       {showPayment && (
-        <PayPalScriptProvider options={{ "client-id": "AdM0I7Z4hbUK6yPDVTN0apHNzL8g5fzIPLOsBlWCxHdMs47lO4iFeR5Zb4qz1_z_NAXJPJgNHDzFlPCV", currency: "USD" }}>
+        <PayPalScriptProvider
+          options={{
+            "client-id": "AdM0I7Z4hbUK6yPDVTN0apHNzL8g5fzIPLOsBlWCxHdMs47lO4iFeR5Zb4qz1_z_NAXJPJgNHDzFlPCV",
+            currency: "USD",
+          }}
+        >
           <PayPalButtons
             style={{ layout: "vertical" }}
             createOrder={createOrder}
@@ -104,13 +124,14 @@ const MilkExportationPayment = () => {
             }}
             onCancel={() => {
               setShowPayment(false);
-              setError('Payment was cancelled.');
+              setError("Payment was cancelled.");
             }}
           />
         </PayPalScriptProvider>
       )}
     </div>
   );
+  
 };
 
 export default MilkExportationPayment;

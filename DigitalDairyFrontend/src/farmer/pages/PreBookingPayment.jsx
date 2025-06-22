@@ -78,64 +78,71 @@ const PreBookingPayment = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-10 bg-white p-6 shadow rounded space-y-6">
-      <h2 className="text-2xl font-bold text-blue-800">Milk Collection Payment</h2>
+    <div className="max-w-xl mx-auto mt-16 bg-white border border-gray-200 shadow-2xl rounded-3xl px-8 py-10 space-y-6">
+  <h2 className="text-3xl font-bold text-center text-blue-800 mb-6">
+    💰 Milk Collection Payment
+  </h2>
 
-      <div className="space-y-2 text-gray-700 text-lg">
-        <p><strong>Payer ID:</strong> {payerId}</p>
-        <p><strong>Booking ID:</strong> {bookingId}</p>
+  <div className="space-y-3 text-gray-800 text-base sm:text-lg">
+    <p><span className="font-semibold text-blue-700">👤 Payer ID:</span> {payerId}</p>
+    <p><span className="font-semibold text-blue-700">📦 Booking ID:</span> {bookingId}</p>
 
-        <div>
-          <label className="block mb-1 font-medium">Enter Amount (₹):</label>
-          <input
-            type="number"
-            min="1"
-            value={amount}
-            onChange={handleAmountChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter payment amount"
-            required
-          />
-        </div>
-      </div>
-
-      {error && <p className="text-red-600">{error}</p>}
-      {loading && <p className="text-blue-600">Processing Payment...</p>}
-
-      {!showPayment && !success && (
-        <button
-          onClick={() => {
-            if (amount && parseFloat(amount) > 0) {
-              setShowPayment(true);
-              setError(null);
-            } else {
-              setError("Please enter a valid amount.");
-            }
-          }}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-        >
-          Pay Now
-        </button>
-      )}
-
-      {showPayment && (
-        <PayPalScriptProvider options={{ "client-id": "AdM0I7Z4hbUK6yPDVTN0apHNzL8g5fzIPLOsBlWCxHdMs47lO4iFeR5Zb4qz1_z_NAXJPJgNHDzFlPCV", currency: "USD" }}>
-          <PayPalButtons
-            style={{ layout: "vertical" }}
-            createOrder={createOrder}
-            onApprove={onApprove}
-            onError={(err) => {
-              console.error("PayPal error:", err);
-              setError("Something went wrong during PayPal transaction.");
-            }}
-            onCancel={() => {
-              setShowPayment(false);
-              setError('Payment was cancelled.');
-            }}
-          />
-        </PayPalScriptProvider>
-      )}
+    <div>
+      <label className="block mb-1 text-sm font-semibold text-gray-700">Enter Amount (₹):</label>
+      <input
+        type="number"
+        min="1"
+        value={amount}
+        onChange={handleAmountChange}
+        className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+        placeholder="Enter payment amount"
+        required
+      />
     </div>
+  </div>
+
+  {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+  {loading && <p className="text-blue-600 text-sm font-medium">⏳ Processing Payment...</p>}
+
+  {!showPayment && !success && (
+    <div>
+      <button
+        onClick={() => {
+          if (amount && parseFloat(amount) > 0) {
+            setShowPayment(true);
+            setError(null);
+          } else {
+            setError("❗ Please enter a valid amount.");
+          }
+        }}
+        className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-3 rounded-xl transition duration-300 shadow-md"
+      >
+        💳 Pay Now
+      </button>
+    </div>
+  )}
+
+  {showPayment && (
+    <div className="mt-6 border border-gray-200 rounded-xl shadow-inner p-4">
+      <PayPalScriptProvider options={{ "client-id": "AdM0I7Z4hbUK6yPDVTN0apHNzL8g5fzIPLOsBlWCxHdMs47lO4iFeR5Zb4qz1_z_NAXJPJgNHDzFlPCV", currency: "USD" }}>
+        <PayPalButtons
+          style={{ layout: "vertical" }}
+          createOrder={createOrder}
+          onApprove={onApprove}
+          onError={(err) => {
+            console.error("PayPal error:", err);
+            setError("Something went wrong during PayPal transaction.");
+          }}
+          onCancel={() => {
+            setShowPayment(false);
+            setError("⚠️ Payment was cancelled.");
+          }}
+        />
+      </PayPalScriptProvider>
+    </div>
+  )}
+</div>
+
   );
 };
 
