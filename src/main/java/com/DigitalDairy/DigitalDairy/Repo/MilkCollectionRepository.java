@@ -13,5 +13,6 @@ public interface MilkCollectionRepository extends JpaRepository<MilkCollection, 
     List<MilkCollection> findByFarmer_UserId(Long userId);
 
     List<MilkCollection> findByDairy_DairyId(Long dairyId);
+
 }
 

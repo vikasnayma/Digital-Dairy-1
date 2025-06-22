@@ -1,19 +1,14 @@
 package com.DigitalDairy.DigitalDairy.Services;
 
 import com.DigitalDairy.DigitalDairy.DTOs.MilkCollectionDTO;
-import com.DigitalDairy.DigitalDairy.Entity.Dairy;
-import com.DigitalDairy.DigitalDairy.Entity.MilkCollection;
-import com.DigitalDairy.DigitalDairy.Entity.PaymentEntity;
-import com.DigitalDairy.DigitalDairy.Entity.User;
-import com.DigitalDairy.DigitalDairy.Repo.DairyRepository;
-import com.DigitalDairy.DigitalDairy.Repo.MilkCollectionRepository;
-import com.DigitalDairy.DigitalDairy.Repo.PaymentRepository;
-import com.DigitalDairy.DigitalDairy.Repo.UserRepo;
+import com.DigitalDairy.DigitalDairy.Entity.*;
+import com.DigitalDairy.DigitalDairy.Repo.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +20,8 @@ public class MilkCollectionService {
     private final UserRepo userRepository;
     private final DairyRepository dairyRepository;
     private final PaymentRepository paymentRepository;
+    private final MilkRatesRepository milkRatesRepository;
+
 
     public MilkCollectionDTO addMilkCollection(MilkCollectionDTO dto) {
         User farmer = userRepository.findById(dto.getFarmerId())
@@ -39,7 +36,15 @@ public class MilkCollectionService {
                     .orElseThrow(() -> new RuntimeException("Payment not found with ID: " + dto.getPaymentId()));
         }
 
-        BigDecimal totalAmount = dto.getQuantityLitres().multiply(dto.getRateApplied());
+        // ⬇️ Fetch effective rate for the date
+        LocalDate date = dto.getDate();
+        MilkRates effectiveRate = milkRatesRepository
+                .findTopByDairy_DairyIdAndEffectiveFromLessThanEqualOrderByEffectiveFromDesc(dto.getDairyId(), date)
+                .orElseThrow(() -> new RuntimeException("No effective milk rate found for the provided date."));
+
+        // ⬇️ Calculate rate applied and total amount
+        BigDecimal rateApplied = effectiveRate.getPricePerFat().multiply(dto.getFatContent());
+        BigDecimal totalAmount = rateApplied.multiply(dto.getQuantityLitres());
 
         MilkCollection milkCollection = MilkCollection.builder()
                 .farmer(farmer)
@@ -50,7 +55,7 @@ public class MilkCollectionService {
                 .fatContent(dto.getFatContent())
                 .payment(paymentEntity)
                 .qualityGrade(dto.getQualityGrade())
-                .rateApplied(dto.getRateApplied())
+                .rateApplied(rateApplied)
                 .totalAmount(totalAmount)
                 .build();
 

@@ -14,7 +14,16 @@ import com.DigitalDairy.DigitalDairy.Services.PaypalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -64,7 +73,8 @@ public class PaymentController {
                         .invoiceLink("https://www.paypal.com/activity/payment/" + orderId)
                         .build();
 
-                paymentRepository.save(paymentEntity);
+                PaymentEntity savedPayment = paymentRepository.save(paymentEntity);
+
 
                 // Assign payment ID to each collection
                 List<MilkCollection> collections = milkCollectionRepo.findAllById(dto.getReferenceIds());
@@ -73,7 +83,7 @@ public class PaymentController {
 
                 return ResponseEntity.ok(PaymentResponseDTO.builder()
                         .status("success")
-                        .paymentId(orderId)
+                        .paymentId(String.valueOf(savedPayment.getPaymentId()))
                         .amount(dto.getAmount())
                         .build());
 
@@ -114,7 +124,8 @@ public class PaymentController {
                         .invoiceLink("https://www.paypal.com/activity/payment/" + orderId)
                         .build();
 
-                paymentRepository.save(paymentEntity);
+                PaymentEntity savedPayment = paymentRepository.save(paymentEntity);
+
 
                 // Assign payment ID to each collection
                 List<MilkCollection> collections = milkCollectionRepo.findAllById(dto.getReferenceIds());
@@ -128,7 +139,7 @@ public class PaymentController {
 
                 return ResponseEntity.ok(PaymentResponseDTO.builder()
                         .status("success")
-                        .paymentId(orderId)
+                        .paymentId(String.valueOf(savedPayment.getPaymentId()))
                         .amount(dto.getAmount())
                         .build());
 
@@ -169,7 +180,7 @@ public class PaymentController {
                         .invoiceLink("https://www.paypal.com/activity/payment/" + orderId)
                         .build();
 
-                paymentRepository.save(paymentEntity);
+                PaymentEntity savedPayment =  paymentRepository.save(paymentEntity);
 
                 // Assign payment ID to each collection
                 List<MilkExportation> exportations = milkExportationRepository.findAllById(dto.getReferenceIds());
@@ -178,7 +189,7 @@ public class PaymentController {
 
                 return ResponseEntity.ok(PaymentResponseDTO.builder()
                         .status("success")
-                        .paymentId(orderId)
+                        .paymentId(String.valueOf(savedPayment.getPaymentId()))
                         .amount(dto.getAmount())
                         .build());
 
@@ -202,6 +213,27 @@ public class PaymentController {
     @GetMapping("/payee-payments/{payeeId}")
     public List<PaymentDTO> getAllPaymentsByPayee(@PathVariable Long payeeId){
         return paymentService.getAllPaymentsByPayee(payeeId);
+    }
+
+
+    @GetMapping("/{paymentId}/invoice")
+    public ResponseEntity<Resource> downloadInvoice(@PathVariable Long paymentId) throws Exception {
+        String path = paymentService.generateInvoice(paymentId);
+        File file = new File(path);
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("Invoice file not found.");
+        }
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getName());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + file.getName())
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
     }
 }
 

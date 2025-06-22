@@ -14,6 +14,7 @@ import java.util.List;
 public class PaymentDTO {
     private Long payerId;
     private Long payeeId;
+    private Long paymentId;
     private String paymentFor;
     private LocalDate paymentDate;
     private List<Long> referenceIds;

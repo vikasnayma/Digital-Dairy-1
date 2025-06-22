@@ -8,6 +8,7 @@ import com.DigitalDairy.DigitalDairy.Repo.MilkRatesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,9 +27,7 @@ public class MilkRatesService {
 
         MilkRates milkRate = MilkRates.builder()
                 .dairy(dairy)
-                .fatContent(dto.getFatContent())
-                .qualityGrade(dto.getQualityGrade())
-                .pricePerLitre(dto.getPricePerLitre())
+                .pricePerFat(dto.getPricePerFat())
                 .effectiveFrom(dto.getEffectiveFrom())
                 .build();
 
@@ -53,13 +52,18 @@ public class MilkRatesService {
                 .collect(Collectors.toList());
     }
 
+    public MilkRatesDTO getRateByEffectiveDate(Long dairyId, LocalDate date) {
+        MilkRates rate =  milkRatesRepository
+                .findTopByDairy_DairyIdAndEffectiveFromLessThanEqualOrderByEffectiveFromDesc(dairyId, date)
+                .orElseThrow(() -> new RuntimeException("No effective milk rate found for this date."));
+        return convertToDTO(rate);
+    }
+
     private MilkRatesDTO convertToDTO(MilkRates rate) {
         return MilkRatesDTO.builder()
                 .rateId(rate.getRateId())
                 .dairyId(rate.getDairy().getDairyId())
-                .fatContent(rate.getFatContent())
-                .qualityGrade(rate.getQualityGrade())
-                .pricePerLitre(rate.getPricePerLitre())
+                .pricePerFat(rate.getPricePerFat())
                 .effectiveFrom(rate.getEffectiveFrom())
                 .build();
     }

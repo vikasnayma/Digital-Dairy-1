@@ -11,9 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class MilkRatesDTO {
     private Long rateId;
-    private Long dairyId; // Only ID here, not full Dairy object
-    private BigDecimal fatContent;
-    private String qualityGrade;
-    private BigDecimal pricePerLitre;
+    private Long dairyId;
+    private BigDecimal pricePerFat;
     private LocalDate effectiveFrom;
 }

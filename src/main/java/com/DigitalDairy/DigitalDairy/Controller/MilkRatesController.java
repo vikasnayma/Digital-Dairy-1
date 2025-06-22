@@ -6,6 +6,7 @@ import com.DigitalDairy.DigitalDairy.Services.MilkRatesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,5 +34,10 @@ public class MilkRatesController {
     @GetMapping("/dairy/{dairyId}")
     public List<MilkRatesDTO> getRateByDairy(@PathVariable Long dairyId){
         return milkRatesService.getRatesByDairyId(dairyId);
+    }
+
+    @GetMapping("/effective-rate/{dairyId}")
+    public MilkRatesDTO getRateByEffectiveDate (@PathVariable Long dairyId , @RequestBody LocalDate date){
+        return milkRatesService.getRateByEffectiveDate(dairyId , date);
     }
 }

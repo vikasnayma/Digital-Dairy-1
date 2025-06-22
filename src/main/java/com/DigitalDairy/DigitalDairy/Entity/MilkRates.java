@@ -23,14 +23,8 @@ public class MilkRates {
     @JoinColumn(name = "dairy_id", nullable = false)
     private Dairy dairy;
 
-    @Column(name = "fat_content", precision = 5, scale = 2)
-    private BigDecimal fatContent;
-
-    @Column(name = "quality_grade", length = 20)
-    private String qualityGrade;
-
     @Column(name = "price_per_litre", precision = 10, scale = 2)
-    private BigDecimal pricePerLitre;
+    private BigDecimal pricePerFat;
 
     @Column(name = "effective_from", nullable = false)
     private LocalDate effectiveFrom;

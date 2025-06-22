@@ -13,10 +13,6 @@ public interface MilkRatesRepository extends JpaRepository<MilkRates, Long> {
     // Get all rates for a specific dairy
     List<MilkRates> findByDairy_DairyId(Long dairyId);
 
-    // Get rates for a dairy that are effective on or before a given date, sorted by most recent
-    List<MilkRates> findByDairy_DairyIdAndEffectiveFromLessThanEqualOrderByEffectiveFromDesc(
-            Long dairyId, LocalDate date);
-
-
+    Optional<MilkRates> findTopByDairy_DairyIdAndEffectiveFromLessThanEqualOrderByEffectiveFromDesc(Long dairyId, LocalDate date);
 
 }
