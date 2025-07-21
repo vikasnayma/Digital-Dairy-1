@@ -29,9 +29,10 @@ export const createDairy = (dairyDetails) => async (dispatch) => {
         },
       }
     );
-    console.log(response.data);
+    console.log("dispatch",response.data);
     dispatch(setSuccess(true));
     dispatch(setError(null));
+    return response.data;
   } catch (err) {
     dispatch(setError(err.response?.data?.error || "Failed to fetch users"));
   }

@@ -10,6 +10,12 @@ import {
   FaUsers,
   FaBars,
   FaTimes,
+  FaSignOutAlt,
+  FaHistory,
+  FaCalendarAlt,
+  FaExchangeAlt,
+  FaChartLine,
+  FaCommentAlt
 } from "react-icons/fa";
 
 const Dashboard = () => {
@@ -19,10 +25,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth < 768) {
-        setIsOpen(false);
-      }
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      setIsOpen(!mobile);
     };
 
     checkIfMobile();
@@ -39,32 +44,75 @@ const Dashboard = () => {
 
   const menuMap = {
     farmer: [
-      // { name: "Home", path: "/dashboard/home-farmer", icon: <FaHome /> },
-      { name: "Milk Collection History", path: "/dashboard/milk-collection-history-farmer", icon: <FaClipboardList /> },
-      { name: "Pre Milk Bookings", path: "/dashboard/pre-booking-farmer", icon: <FaClipboardList /> },
-      { name: "Revenue", path: "/dashboard/revenue-farmer", icon: <FaMoneyBill /> },
+      {
+        name: "Milk Collection History",
+        path: "/dashboard/milk-collection-history-farmer",
+        icon: <FaHistory />,
+      },
+      {
+        name: "Pre Milk Bookings",
+        path: "/dashboard/pre-booking-farmer",
+        icon: <FaCalendarAlt />,
+      },
+      {
+        name: "Revenue",
+        path: "/dashboard/revenue-farmer",
+        icon: <FaChartLine />,
+      },
       { name: "Profile", path: "/dashboard/profile-farmer", icon: <FaUser /> },
+      { name: "Chat", path: "/dashboard/chat-farmer", icon: <FaCommentAlt /> },
     ],
     operator: [
       { name: "Home", path: "/dashboard/home-operator", icon: <FaHome /> },
-      { name: "Bookings", path: "/dashboard/bookings-operator", icon: <FaClipboardList /> },
-      { name: "Farmers", path: "/dashboard/farmers-operator", icon: <FaUser /> },
-      { name: "Milk Collection", path: "/dashboard/milk-collection-operator", icon: <FaClipboardList /> },
-      { name: "Milk Exportation", path: "/dashboard/exportation-operator", icon: <FaClipboardList /> },
-      { name: "Milk Rates", path: "/dashboard/milk-rates", icon: <FaClipboardList /> },
-      { name: "Profile", path: "/dashboard/profile-operator", icon: <FaUser /> },
+      {
+        name: "Bookings",
+        path: "/dashboard/bookings-operator",
+        icon: <FaCalendarAlt />,
+      },
+      {
+        name: "Farmers",
+        path: "/dashboard/farmers-operator",
+        icon: <FaUsers />,
+      },
+      {
+        name: "Milk Collection",
+        path: "/dashboard/milk-collection-operator",
+        icon: <FaClipboardList />,
+      },
+      {
+        name: "Milk Exportation",
+        path: "/dashboard/exportation-operator",
+        icon: <FaExchangeAlt />,
+      },
+      {
+        name: "Milk Rates",
+        path: "/dashboard/milk-rates",
+        icon: <FaMoneyBill />,
+      },
+      {
+        name: "Profile",
+        path: "/dashboard/profile-operator",
+        icon: <FaUser />,
+      },
+      { name: "Chat", path: "/dashboard/chat-operator", icon: <FaCommentAlt /> },
     ],
     admin: [
       { name: "Home", path: "/dashboard/home-admin", icon: <FaHome /> },
-      { name: "Operators", path: "/dashboard/operators-admin", icon: <FaUsers /> },
+      {
+        name: "Operators",
+        path: "/dashboard/operators-admin",
+        icon: <FaUsers />,
+      },
       { name: "Farmers", path: "/dashboard/farmers-admin", icon: <FaList /> },
       { name: "Profile", path: "/dashboard/profile-admin", icon: <FaUser /> },
     ],
     client: [
-      // { name: "Home", path: "/dashboard/home-client", icon: <FaHome /> },
-      { name: "Collection History", path: "/dashboard/exportation-client", icon: <FaClipboardList /> },
+      {
+        name: "Collection History",
+        path: "/dashboard/exportation-client",
+        icon: <FaHistory />,
+      },
       { name: "Profile", path: "/dashboard/profile-client", icon: <FaUser /> },
-      
     ],
   };
 
@@ -72,103 +120,104 @@ const Dashboard = () => {
   const menuItems = menuMap[role] || [];
 
   return (
-    <div className="flex h-screen bg-[#fefae0] text-[#3e2c23] font-sans relative overflow-hidden">
-  {/* Overlay for mobile */}
-  {isMobile && isOpen && (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-40"
-      onClick={toggleSidebar}
-    />
-  )}
-
-  {/* Sidebar */}
-  <div
-    className={`fixed top-0 left-0 h-full transition-all duration-300 z-50 shadow-xl 
-      ${isOpen ? "w-64" : "w-20"} 
-      bg-[#7f5539] text-white rounded-tr rounded-br-3xl`}
-  >
-    <div className="h-full flex flex-col">
-      {/* Toggle Header */}
-      <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b border-[#b08968]">
-        <h1
-          className={`text-2xl font-bold transition-all duration-300 ${
-            isOpen ? "block" : "hidden"
-          }`}
-        >
-          Dashboard
-        </h1>
+    <div className="flex min-h-screen bg-green-50 text-gray-800 font-sans">
+      {/* Sidebar Toggle Button (Top Left Corner) */}
+      {!isOpen && (
         <button
           onClick={toggleSidebar}
-          className="text-xl hover:text-[#fefae0] transition"
+          className="fixed top-4 left-4 z-50 md:hidden bg-white p-2 rounded-full shadow-md hover:bg-green-100 transition-colors"
         >
-          {isOpen ? <FaTimes /> : <FaBars />}
+          <FaBars className="text-xl text-green-700" />
         </button>
-      </div>
+      )}
 
-      {/* Menu */}
-      <ul className="flex-1 px-4 py-6 space-y-3">
-        {menuItems.map((item, idx) => (
-          <li key={idx}>
-            <NavLink
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 ${
-                  isActive
-                    ? "bg-[#9c6644] text-white shadow-inner"
-                    : "hover:bg-[#9c6644]/90 hover:text-[#fff3cc]"
-                }`
-              }
-            >
-              <span className="text-xl">{item.icon}</span>
-              <span
-                className={`text-base font-medium transition-opacity duration-200 ${
-                  isOpen ? "opacity-100" : "opacity-0 hidden"
-                }`}
-              >
-                {item.name}
-              </span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
+      {/* Mobile Overlay */}
+      {isMobile && isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-40"
+          onClick={toggleSidebar}
+        />
+      )}
 
-  {/* Main Content Area */}
-  <div
-    className={`flex-1 flex flex-col transition-all duration-300 h-full ${
-      isOpen ? "ml-64" : "ml-20"
-    }`}
-  >
-    {/* Topbar */}
-    <div
-      className="bg-[#9c6644] text-white h-16 flex justify-between items-center px-6 shadow-md 
-      fixed top-0 right-0 z-40 transition-all duration-300 rounded-bl-3xl"
-      style={{ left: isOpen ? "16rem" : "5rem" }}
-    >
-      <div className="flex items-center gap-4">
-        {isMobile && (
-          <FaBars
-            className="text-xl cursor-pointer hover:text-[#fefae0]"
-            onClick={toggleSidebar}
-          />
-        )}
-        <h1 className="text-lg sm:text-xl font-semibold tracking-wide">
-          Welcome, {user?.name || "User"}
-        </h1>
-      </div>
-
-      <button
-        onClick={handleLogout}
-        className="bg-[#b08968] hover:bg-[#a47148] text-white px-4 py-2 rounded-full 
-        text-sm sm:text-base transition-all duration-200 shadow-md"
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-full z-50 transition-all duration-300 ease-in-out ${
+          isOpen ? "w-64" : "w-20"
+        } bg-white shadow-lg border-r border-green-100`}
       >
-        Logout
-      </button>
-    </div>
-  </div>
-</div>
+        <div className="relative px-4 py-4 border-b border-green-100 flex items-center bg-green-600">
+          <button
+            onClick={toggleSidebar}
+            className="text-xl text-white mr-3 hover:text-green-100 transition-colors"
+          >
+            {isOpen ? <FaTimes /> : <FaBars />}
+          </button>
+          <h1
+            className={`text-xl font-bold text-white transition-opacity duration-300 ${
+              isOpen ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Dairy Dashboard
+          </h1>
+        </div>
 
+        <ul className="mt-6 space-y-2 px-2">
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 px-4 py-3 rounded-lg transition-all ${
+                    isActive
+                      ? "bg-green-100 text-green-800 font-medium"
+                      : "hover:bg-green-50 text-gray-700"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={`text-lg ${isActive ? 'text-green-600' : 'text-green-500'}`}>
+                      {item.icon}
+                    </span>
+                    {isOpen && <span className="text-base">{item.name}</span>}
+                  </>
+                )}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      {/* Main Content */}
+      <main
+        className={`flex-1 flex flex-col transition-all duration-300 ml-0 ${
+          isOpen ? "md:ml-64" : "md:ml-20"
+        }`}
+      >
+        {/* Topbar */}
+        <header
+          className={`h-16 flex items-center justify-between px-6 bg-white shadow-sm transition-all duration-300 z-30 fixed top-0 w-full ${
+            isOpen ? "md:left-64" : "md:left-20"
+          }`}
+        >
+          <div className="flex items-center gap-4">
+            <h2 className="text-lg font-semibold text-green-800">
+              Welcome, {user?.name || "User"}
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleLogout}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors shadow-md flex items-center gap-2 mr-64"
+            >
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </button>
+          </div>
+        </header>
+      </main>
+    </div>
   );
 };
 

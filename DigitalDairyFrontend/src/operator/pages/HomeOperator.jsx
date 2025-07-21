@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getDairyDetails } from '../../Redux/Slices/dairyActions';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDairyDetails } from "../../Redux/Slices/dairyActions";
+import { motion } from "framer-motion";
 
 const HomeOperator = () => {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ const HomeOperator = () => {
 
   if (loading) {
     return (
-      <p className="text-center mt-8 text-amber-700 font-medium animate-pulse">
+      <p className="text-center mt-8 text-green-700 font-medium animate-pulse">
         Loading dairy details...
       </p>
     );
@@ -20,7 +21,7 @@ const HomeOperator = () => {
 
   if (error) {
     return (
-      <p className="text-center mt-8 text-red-600 font-medium bg-amber-50 p-3 rounded-lg border border-amber-200">
+      <p className="text-center mt-8 text-red-600 font-medium bg-red-50 p-3 rounded-lg border border-red-200">
         {error}
       </p>
     );
@@ -28,36 +29,43 @@ const HomeOperator = () => {
 
   if (!dairy) {
     return (
-      <p className="text-center mt-8 text-stone-500 bg-amber-50 p-4 rounded-lg shadow-inner">
+      <p className="text-center mt-8 text-gray-500 bg-green-50 p-4 rounded-lg shadow-inner">
         No dairy found for this operator.
       </p>
     );
   }
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 bg-amber-50 shadow-lg rounded-xl border border-amber-100 transition-all hover:shadow-xl">
-      <h2 className="text-2xl font-bold text-stone-800 mb-4 pb-2 border-b border-amber-200">
-        Dairy Details
-      </h2>
-      <div className="space-y-3">
-        <div className="flex items-center">
-          <span className="font-semibold text-stone-700 w-28">Name: </span>
-          <span className="text-stone-600">{dairy.name}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold text-stone-700 w-28">Dairy Id: </span>
-          <span className="text-stone-600">{dairy.dairyId}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold text-stone-700 w-28">Operator Id: </span>
-          <span className="text-stone-600">{dairy.operatorId}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="font-semibold text-stone-700 w-28">Location: </span>
-          <span className="text-stone-600">{dairy.location}</span>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="w-full min-h-screen px-4 md:px-10 py-12"
+    >
+      <div className="max-w-3xl mx-auto mt-18 bg-white shadow-lg rounded-2xl px-8 py-10 border border-green-100">
+        <h2 className="text-3xl font-extrabold text-center text-green-800 mb-8 pb-2 border-b border-green-200">
+          Dairy Details
+        </h2>
+        <div className="space-y-5 text-base">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+            <span className="font-semibold w-36 text-gray-700">Name:</span>
+            <span className="text-gray-800">{dairy.name}</span>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+            <span className="font-semibold w-36 text-gray-700">Dairy ID:</span>
+            <span className="text-gray-800">{dairy.dairyId}</span>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+            <span className="font-semibold w-36 text-gray-700">Operator ID:</span>
+            <span className="text-gray-800">{dairy.operatorId}</span>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+            <span className="font-semibold w-36 text-gray-700">Location:</span>
+            <span className="text-gray-800">{dairy.location}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

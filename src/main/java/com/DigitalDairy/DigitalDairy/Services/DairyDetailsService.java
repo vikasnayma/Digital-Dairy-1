@@ -39,7 +39,12 @@ public class DairyDetailsService {
         return convertToDTO(dairy);
     }
 
+    public DairyDTO getDairyDetailsById(Long dairyId){
+        Dairy dairy = dairyRepository.findById(dairyId)
+                .orElseThrow(() -> new RuntimeException("Dairy not found"));
 
+        return convertToDTO((dairy));
+    }
 
     public DairyDTO updateDairyDetails(DairyDTO dto , Long operatorId){
         Dairy currentDairy = dairyRepository.findByOperator_UserId(operatorId).orElseThrow(() -> new RuntimeException("Dairy not found"));

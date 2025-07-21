@@ -8,11 +8,14 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+
 import DairyForm from "./components/DairyForm";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import Layout from "./components/Layout";
 import { useAuth } from "./AuthContext/AuthContext";
+import FarmerChatComponent from "./components/FarmerChatComponent";
+import OperatorChatComponent from "./components/OperatorChatComponent";
 
 import HomeFarmer from "./farmer/pages/HomeFarmer";
 import RevenueFarmer from "./farmer/pages/RevenueFarmer";
@@ -81,10 +84,11 @@ const App = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen text-[#2A1F1C]
+ overflow-x-hidden">
       <Router>
 
-        <div className="p-4 flex-grow">
+        <div className="flex-grow">
           <Routes>
             {/* Auto Redirect after login */}
             <Route path="/redirect" element={<AutoRedirect />} />
@@ -95,6 +99,7 @@ const App = () => {
               path="/signup"
               element={<PublicRoute element={<Signup />} />}
             />
+  
             <Route
               path="/login"
               element={<PublicRoute element={<Login />} />}
@@ -115,6 +120,7 @@ const App = () => {
               <Route path="milk-collection-history-farmer" element={<CollectionHistoryFarmer />}></Route>
               <Route path="pre-booking-farmer" element={<PreBookingFarmer />}></Route>
               <Route path="pre-booking-payment/:bookingId" element={<PreBookingPayment />}></Route>
+              <Route path="chat-farmer" element={<FarmerChatComponent />}></Route>
             </Route>
 
             {/* Operator Routes */}
@@ -132,6 +138,7 @@ const App = () => {
               <Route path="milk-collection-operator/payment/:farmerId" element={<PaymentMilkCollection/>}></Route>
               <Route path="payment-success-operator" element={<PaymentSuccessOperator/>}></Route>
               <Route path="milk-rates" element={<MilkRates/>}></Route>
+              <Route path="chat-operator" element={<OperatorChatComponent />}></Route>
             </Route>
 
             {/* Admin Routes */}

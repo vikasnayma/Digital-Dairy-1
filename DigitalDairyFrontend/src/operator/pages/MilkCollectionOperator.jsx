@@ -1,32 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addMilkCollection,
   fetchMilkCollectionsByDairy,
-  getDairyDetails
-} from '../../Redux/Slices/dairyActions';
+  getDairyDetails,
+} from "../../Redux/Slices/dairyActions";
+import { motion } from "framer-motion";
 
 const MilkCollectionOperator = () => {
   const dispatch = useDispatch();
-  const { loading, error, success, milkCollection } = useSelector((state) => state.milkCollection);
+  const { loading, error, success, milkCollection } = useSelector(
+    (state) => state.milkCollection
+  );
   const { dairy } = useSelector((state) => state.dairy);
 
   const [formData, setFormData] = useState({
-    farmerId: '',
-    dairyId: '',
-    date: '',
-    shift: 'morning',
-    quantityLitres: '',
-    fatContent: '',
-    qualityGrade: '',
-    rateApplied: ''
+    farmerId: "",
+    dairyId: "",
+    date: "",
+    shift: "morning",
+    quantityLitres: "",
+    fatContent: "",
+    qualityGrade: "",
+    rateApplied: "",
   });
 
   const [filter, setFilter] = useState({
-    date: '',
-    shift: '',
-    farmerId: ''
+    date: "",
+    shift: "",
+    farmerId: "",
   });
+
+  useEffect(() => {
+    dispatch(getDairyDetails());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (dairy?.dairyId) {
+      setFormData((prev) => ({ ...prev, dairyId: dairy.dairyId }));
+      dispatch(fetchMilkCollectionsByDairy(dairy.dairyId));
+    }
+  }, [dairy, dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,262 +58,192 @@ const MilkCollectionOperator = () => {
       ...formData,
       quantityLitres: parseFloat(formData.quantityLitres),
       fatContent: parseFloat(formData.fatContent),
-      rateApplied: parseFloat(formData.rateApplied)
+      rateApplied: parseFloat(formData.rateApplied),
     };
-
     dispatch(addMilkCollection(payload));
     setFormData({
-      farmerId: '',
+      farmerId: "",
       dairyId: formData.dairyId,
-      date: '',
-      shift: 'morning',
-      quantityLitres: '',
-      fatContent: '',
-      qualityGrade: '',
-      rateApplied: ''
+      date: "",
+      shift: "morning",
+      quantityLitres: "",
+      fatContent: "",
+      qualityGrade: "",
+      rateApplied: "",
     });
   };
 
-  useEffect(() => {
-    dispatch(getDairyDetails());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (dairy?.dairyId) {
-      setFormData((prev) => ({ ...prev, dairyId: dairy.dairyId }));
-      dispatch(fetchMilkCollectionsByDairy(dairy.dairyId));
-    }
-  }, [dairy, dispatch]);
-
-  const filteredCollections = milkCollection?.filter((entry) =>
-    (!filter.date || entry.date === filter.date) &&
-    (!filter.shift || entry.shift.toLowerCase() === filter.shift.toLowerCase()) &&
-    (!filter.farmerId || entry.farmerId.toString() === filter.farmerId)
+  const filteredCollections = milkCollection?.filter(
+    (entry) =>
+      (!filter.date || entry.date === filter.date) &&
+      (!filter.shift || entry.shift.toLowerCase() === filter.shift.toLowerCase()) &&
+      (!filter.farmerId || entry.farmerId.toString() === filter.farmerId)
   );
 
   return (
-    <div className="max-w-6xl mx-auto mt-8 space-y-8 px-4 animate-fadeIn">
-      {/* === Add Collection Form === */}
-      <div className="bg-amber-50 p-8 rounded-2xl shadow-lg border border-amber-100 transform transition-all hover:shadow-xl">
-        <h2 className="text-3xl font-bold text-amber-900 mb-6 text-center tracking-tight font-serif">
+    <div className="min-h-screen w-full mt-12 px-4 sm:px-8 py-10">
+      {/* Add Form */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-6xl mx-auto bg-white border border-green-200 rounded-2xl shadow-lg p-6 sm:p-10 mb-10"
+      >
+        <h2 className="text-3xl font-bold text-center mb-8 text-green-800 pb-2 border-b border-green-200">
           Add Milk Collection
-          <span className="block h-1 w-20 bg-amber-300 mx-auto mt-2 rounded-full"></span>
         </h2>
-        
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+          {[
+            ["farmerId", "Farmer ID", "text"],
+            ["date", "Date", "date"],
+            ["quantityLitres", "Quantity (L)", "number"],
+            ["fatContent", "Fat Content (%)", "number"],
+            ["qualityGrade", "Quality Grade", "text"],
+            ["rateApplied", "Rate Applied (₹)", "number"],
+          ].map(([name, label, type]) => (
+            <div className="space-y-1" key={name}>
+              <label className="font-medium text-gray-700">{label}</label>
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              />
+            </div>
+          ))}
+
+          {/* Shift Dropdown */}
           <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Farmer ID</label>
-            <input
-              name="farmerId"
-              value={formData.farmerId}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-              placeholder="Enter Farmer ID"
-            />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Dairy ID</label>
-            <input
-              name="dairyId"
-              value={formData.dairyId}
-              onChange={handleChange}
-              readOnly
-              className="w-full px-4 py-3 border border-amber-100 bg-amber-50 rounded-lg shadow-sm cursor-not-allowed"
-              placeholder="Dairy ID"
-            />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Date</label>
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-            />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Shift</label>
+            <label className="font-medium text-gray-700">Shift</label>
             <select
               name="shift"
               value={formData.shift}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
               <option value="morning">Morning</option>
               <option value="evening">Evening</option>
             </select>
           </div>
-          
+
+          {/* Dairy ID (Read Only) */}
           <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Quantity (L)</label>
+            <label className="font-medium text-gray-700">Dairy ID</label>
             <input
-              type="number"
-              name="quantityLitres"
-              value={formData.quantityLitres}
-              step="0.1"
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-              placeholder="0.0"
+              type="text"
+              name="dairyId"
+              value={formData.dairyId}
+              readOnly
+              className="w-full px-4 py-3 border border-gray-300 bg-gray-100 rounded-lg shadow-sm"
             />
           </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Fat Content (%)</label>
-            <input
-              type="number"
-              name="fatContent"
-              value={formData.fatContent}
-              step="0.1"
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-              placeholder="0.0"
-            />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Quality Grade</label>
-            <input
-              name="qualityGrade"
-              value={formData.qualityGrade}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-              placeholder="Grade"
-            />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Rate Applied</label>
-            <input
-              type="number"
-              name="rateApplied"
-              value={formData.rateApplied}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-              placeholder="0.0"
-            />
-          </div>
-          
+
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="col-span-full mt-4 bg-amber-700 hover:bg-amber-800 text-white py-3 rounded-lg font-semibold tracking-wide shadow-md transition-all transform hover:scale-[1.01] active:scale-[0.99]"
+            className={`col-span-full mt-4 text-white py-3 rounded-lg font-semibold transition-colors ${
+              loading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+            }`}
           >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Processing...
-              </span>
-            ) : 'Submit Collection'}
+            {loading ? "Submitting..." : "Submit Collection"}
           </button>
         </form>
-  
+
         {error && (
-          <div className="mt-4 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded animate-shake">
-            <p className="text-center">{error}</p>
-          </div>
+          <p className="mt-4 text-center text-red-600">{error}</p>
         )}
         {success && (
-          <div className="mt-4 p-3 bg-green-100 border-l-4 border-green-500 text-green-700 rounded animate-fadeIn">
-            <p className="text-center">Milk collection added successfully!</p>
-          </div>
+          <p className="mt-4 text-center text-green-600">
+            Collection added successfully!
+          </p>
         )}
-      </div>
-  
-      {/* === Filter & Collection List === */}
-      <div className="bg-amber-50 p-8 rounded-2xl shadow-lg border border-amber-100 transform transition-all hover:shadow-xl">
-        <h2 className="text-2xl font-bold text-amber-900 mb-6 text-center font-serif">
+      </motion.div>
+
+      {/* Records Display */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-6xl mx-auto bg-white border border-green-200 rounded-2xl shadow-lg p-6 sm:p-10"
+      >
+        <h3 className="text-3xl pb-4 font-bold text-center mb-6 text-green-800 border-b border-green-200">
           Milk Collection Records
-          <span className="block h-1 w-16 bg-amber-300 mx-auto mt-2 rounded-full"></span>
-        </h2>
-  
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Filter by Date</label>
-            <input
-              type="date"
-              name="date"
-              value={filter.date}
-              onChange={handleFilterChange}
-              className="w-full px-4 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-            />
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Filter by Shift</label>
-            <select
-              name="shift"
-              value={filter.shift}
-              onChange={handleFilterChange}
-              className="w-full px-4 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-            >
-              <option value="">All Shifts</option>
-              <option value="morning">Morning</option>
-              <option value="evening">Evening</option>
-            </select>
-          </div>
-          
-          <div className="space-y-1">
-            <label className="text-amber-800 font-medium">Filter by Farmer ID</label>
-            <input
-              type="text"
-              name="farmerId"
-              value={filter.farmerId}
-              onChange={handleFilterChange}
-              placeholder="Enter Farmer ID"
-              className="w-full px-4 py-2 border border-amber-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-300 transition-all bg-white"
-            />
-          </div>
+        </h3>
+
+        {/* Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+          {[
+            ["date", "Filter by Date"],
+            ["shift", "Filter by Shift"],
+            ["farmerId", "Filter by Farmer ID"],
+          ].map(([name, label]) => (
+            <div key={name} className="space-y-1">
+              <label className="font-medium text-gray-700">{label}</label>
+              {name === "shift" ? (
+                <select
+                  name={name}
+                  value={filter[name]}
+                  onChange={handleFilterChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  <option value="">All</option>
+                  <option value="morning">Morning</option>
+                  <option value="evening">Evening</option>
+                </select>
+              ) : (
+                <input
+                  name={name}
+                  type={name === "date" ? "date" : "text"}
+                  value={filter[name]}
+                  onChange={handleFilterChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                />
+              )}
+            </div>
+          ))}
         </div>
-  
-        {filteredCollections?.length > 0 ? (
-          <ul className="space-y-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-amber-300 scrollbar-track-amber-100">
-            {filteredCollections.map((entry) => (
-              <li 
-                key={entry.collectionId} 
-                className="p-5 border border-amber-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:border-amber-200"
+
+        {/* Entries */}
+        <div className="max-h-[500px] overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-green-300">
+          {filteredCollections?.length > 0 ? (
+            filteredCollections.map((entry) => (
+              <div
+                key={entry.collectionId}
+                className="p-4 bg-white rounded-xl border border-green-200 shadow hover:bg-green-50 transition-colors"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-amber-900 text-sm md:text-base">
-                  <p><span className="font-semibold text-amber-700">Farmer ID:</span> {entry.farmerId}</p>
-                  <p><span className="font-semibold text-amber-700">Date:</span> {entry.date}</p>
-                  <p><span className="font-semibold text-amber-700">Shift:</span> <span className="capitalize">{entry.shift}</span></p>
-                  <p><span className="font-semibold text-amber-700">Quantity:</span> <span className="text-amber-600">{entry.quantityLitres} L</span></p>
-                  <p><span className="font-semibold text-amber-700">Fat %:</span> <span className="text-amber-600">{entry.fatContent}</span></p>
-                  <p><span className="font-semibold text-amber-700">Grade:</span> <span className="uppercase font-medium">{entry.qualityGrade}</span></p>
-                  <p><span className="font-semibold text-amber-700">Rate:</span> ₹{entry.rateApplied}</p>
-                  <p><span className="font-semibold text-amber-700">Total:</span> <span className="font-bold">₹{entry.totalAmount}</span></p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-sm sm:text-base">
+                  <p><strong className="text-gray-700">Farmer ID:</strong> {entry.farmerId}</p>
+                  <p><strong className="text-gray-700">Date:</strong> {entry.date}</p>
+                  <p><strong className="text-gray-700">Shift:</strong> {entry.shift}</p>
+                  <p><strong className="text-gray-700">Quantity:</strong> {entry.quantityLitres} L</p>
+                  <p><strong className="text-gray-700">Fat %:</strong> {entry.fatContent}</p>
+                  <p><strong className="text-gray-700">Grade:</strong> {entry.qualityGrade}</p>
+                  <p><strong className="text-gray-700">Rate:</strong> ₹{entry.rateApplied}</p>
+                  <p><strong className="text-gray-700">Total:</strong> ₹{entry.totalAmount}</p>
                   <p>
-                    <span className="font-semibold text-amber-700">Status:</span>{' '}
+                    <strong className="text-gray-700">Status:</strong>{" "}
                     {entry.paymentId ? (
-                      <span className="text-green-600 font-medium bg-green-100 px-2 py-1 rounded-full text-xs">Paid</span>
+                      <span className="text-green-600 font-medium">Paid</span>
                     ) : (
-                      <span className="text-amber-600 font-medium bg-amber-100 px-2 py-1 rounded-full text-xs">Unpaid</span>
+                      <span className="text-yellow-600 font-medium">Unpaid</span>
                     )}
                   </p>
                 </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="text-center p-8 bg-amber-100 rounded-xl border border-amber-200 animate-pulse">
-            <p className="text-amber-800">No milk collection entries found.</p>
-          </div>
-        )}
-      </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 py-4">No entries found.</p>
+          )}
+        </div>
+      </motion.div>
     </div>
-  );  
+  );
 };
 
 export default MilkCollectionOperator;

@@ -23,6 +23,11 @@ public class DairyDetailsController {
         return dairyDetailsService.getDairyByOperatorId(operatorId);
     }
 
+    @GetMapping("/dairy/{dairyId}")
+    public DairyDTO getDairyByDairyId(@PathVariable Long dairyId){
+        return dairyDetailsService.getDairyDetailsById(dairyId);
+    }
+
     @PutMapping("/{operatorId}")
     public  DairyDTO updateDairyDetails(@RequestBody DairyDTO dto , @PathVariable Long operatorId){
         return dairyDetailsService.updateDairyDetails(dto , operatorId);

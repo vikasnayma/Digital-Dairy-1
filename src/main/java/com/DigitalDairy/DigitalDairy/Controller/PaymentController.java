@@ -13,6 +13,7 @@ import com.DigitalDairy.DigitalDairy.Services.PaymentService;
 import com.DigitalDairy.DigitalDairy.Services.PaypalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -53,6 +54,7 @@ public class PaymentController {
         }
     }
 
+    @Transactional
     @PostMapping("/capture")
     public ResponseEntity<PaymentResponseDTO> captureOrder(
             @RequestParam("orderId") String orderId,
@@ -104,6 +106,7 @@ public class PaymentController {
     }
 
 
+    @Transactional
     @PostMapping("/pre-booking-payment/capture")
     public ResponseEntity<PaymentResponseDTO> capturePreBookingOrder(
             @RequestParam("orderId") String orderId,
@@ -160,6 +163,7 @@ public class PaymentController {
     }
 
 
+    @Transactional
     @PostMapping("/exportation-payment/capture")
     public ResponseEntity<PaymentResponseDTO> captureOrderExportation(
             @RequestParam("orderId") String orderId,

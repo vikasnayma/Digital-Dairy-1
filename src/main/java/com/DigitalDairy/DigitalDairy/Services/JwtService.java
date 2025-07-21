@@ -1,6 +1,7 @@
 package com.DigitalDairy.DigitalDairy.Services;
 
 
+import com.DigitalDairy.DigitalDairy.Entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -49,12 +50,20 @@ public class JwtService {
     }
 
     // Generate JWT Token with email as subject
-    public String generateToken(String email) {
+
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", user.getUser_id());
+        claims.put("role", user.getRole().toString());
+        claims.put("dairyId", user.getDairyId());
+        claims.put("email", user.getEmail());
+        claims.put("phone", user.getPhone());
+        claims.put("name", user.getName());
+
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(email)
+                .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 hours
                 .and()

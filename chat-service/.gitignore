@@ -1,4 +1,5 @@
-DigitalDairyFrontend/node_modules
+node_modules
+.env
 
 # Logs
 logs

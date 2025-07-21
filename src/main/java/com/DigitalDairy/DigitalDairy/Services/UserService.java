@@ -47,7 +47,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         // Generate token
-        String token = jwtService.generateToken(savedUser.getEmail());
+        String token = jwtService.generateToken(savedUser);
 
         // Build DTO
         UserDTO dto = UserDTO.builder()
@@ -73,7 +73,7 @@ public class UserService {
 
             if (auth.isAuthenticated()) {
                 User user = userRepository.findByEmail(loginRequest.getEmail()).get();
-                String token = jwtService.generateToken(user.getEmail());
+                String token = jwtService.generateToken(user);
 
                 UserDTO dto = new UserDTO();
                 dto.setUserId(user.getUser_id());
@@ -100,4 +100,11 @@ public class UserService {
         return userRepository.findByDairyIdAndRole(dairyId , Role.farmer);
     }
 
+    public void updateDairyIdForUser(Long userId, Long dairyId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setDairyId(dairyId);
+        userRepository.save(user);
+    }
 }

@@ -48,18 +48,18 @@ const FarmerDetail = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-6 bg-amber-50 rounded-xl shadow-lg border border-amber-100">
-      <h2 className="text-2xl font-bold text-stone-800 mb-6 pb-2 border-b border-amber-200">
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg border border-green-100">
+      <h2 className="text-2xl font-bold text-green-800 mb-6 pb-2 border-b border-green-200">
         Milk Collection History – Farmer #{farmerId}
       </h2>
 
       {loading && (
-        <p className="text-amber-700 animate-pulse py-4 text-center">
+        <p className="text-green-700 animate-pulse py-4 text-center">
           Loading data...
         </p>
       )}
       {error && (
-        <p className="text-red-600 bg-amber-50 p-3 rounded-lg border border-amber-200 text-center">
+        <p className="text-red-600 bg-red-50 p-3 rounded-lg border border-red-200 text-center">
           {error}
         </p>
       )}
@@ -73,21 +73,21 @@ const FarmerDetail = () => {
               <li
                 key={entry.collectionId}
                 className={`p-4 border rounded-lg shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 ${
-                  isPaid ? 'bg-green-50 border-green-200' : 'bg-amber-100/50 border-amber-200'
+                  isPaid ? 'bg-green-50 border-green-200' : 'bg-white border-green-200 hover:bg-green-50'
                 } transition-all hover:shadow-md`}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                   <div>
-                    <p className="text-stone-600"><span className="font-semibold text-stone-700">Date:</span> {entry.date}</p>
-                    <p className="text-stone-600"><span className="font-semibold text-stone-700">Shift:</span> {entry.shift}</p>
+                    <p className="text-gray-600"><span className="font-semibold text-gray-700">Date:</span> {entry.date}</p>
+                    <p className="text-gray-600"><span className="font-semibold text-gray-700">Shift:</span> {entry.shift}</p>
                   </div>
                   <div>
-                    <p className="text-stone-600"><span className="font-semibold text-stone-700">Quantity:</span> {entry.quantityLitres} L</p>
-                    <p className="text-stone-600"><span className="font-semibold text-stone-700">Fat Content:</span> {entry.fatContent}%</p>
+                    <p className="text-gray-600"><span className="font-semibold text-gray-700">Quantity:</span> {entry.quantityLitres} L</p>
+                    <p className="text-gray-600"><span className="font-semibold text-gray-700">Fat Content:</span> {entry.fatContent}%</p>
                   </div>
                   <div>
-                    <p className="text-stone-600"><span className="font-semibold text-stone-700">Rate:</span> ₹{entry.rateApplied}</p>
-                    <p className="text-stone-600"><span className="font-semibold text-stone-700">Amount:</span> ₹{entry.totalAmount}</p>
+                    <p className="text-gray-600"><span className="font-semibold text-gray-700">Rate:</span> ₹{entry.rateApplied}</p>
+                    <p className="text-gray-600"><span className="font-semibold text-gray-700">Amount:</span> ₹{entry.totalAmount}</p>
                   </div>
                 </div>
 
@@ -95,7 +95,7 @@ const FarmerDetail = () => {
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     isPaid 
                       ? 'bg-green-100 text-green-800' 
-                      : 'bg-amber-100 text-amber-800'
+                      : 'bg-gray-100 text-gray-800'
                   }`}>
                     {isPaid ? 'Paid' : 'Unpaid'}
                   </span>
@@ -104,7 +104,7 @@ const FarmerDetail = () => {
                     disabled={isPaid}
                     checked={selectedIds.includes(entry.collectionId)}
                     onChange={() => handleCheckboxChange(entry.collectionId)}
-                    className="w-5 h-5 accent-amber-600 border-amber-300 rounded focus:ring-amber-500"
+                    className="w-5 h-5 accent-green-600 border-gray-300 rounded focus:ring-green-500"
                   />
                 </div>
               </li>
@@ -112,21 +112,21 @@ const FarmerDetail = () => {
           })}
         </ul>
       ) : (
-        <p className="text-stone-500 mt-4 p-4 bg-amber-50 rounded-lg text-center">
+        <p className="text-gray-500 mt-4 p-4 bg-green-50 rounded-lg text-center">
           No milk collection records found for this farmer.
         </p>
       )}
 
-      <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-amber-200 pt-4">
+      <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-green-200 pt-4">
         <button
           onClick={() => navigate(-1)}
-          className="bg-amber-700 hover:bg-amber-800 text-amber-50 px-4 py-2 rounded-md transition-all hover:shadow-md"
+          className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-all hover:shadow-md"
         >
           Back
         </button>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <p className="font-semibold text-lg text-stone-700">
+          <p className="font-semibold text-lg text-green-800">
             Total Selected: ₹{totalAmount?.toFixed(2) || '0.00'}
           </p>
           <button
@@ -134,9 +134,9 @@ const FarmerDetail = () => {
             disabled={selectedIds.length === 0}
             className={`${
               selectedIds.length === 0
-                ? 'bg-stone-400 cursor-not-allowed'
-                : 'bg-amber-700 hover:bg-amber-800'
-            } text-amber-50 px-4 py-2 rounded-md transition-all hover:shadow-md`}
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-green-600 hover:bg-green-700'
+            } text-white px-4 py-2 rounded-md transition-all hover:shadow-md`}
           >
             Pay Now
           </button>
